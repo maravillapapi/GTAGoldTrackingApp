@@ -42,10 +42,10 @@ const ProductionCalendar: React.FC = () => {
   const monthNames = ["JANVIER", "FÉVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET", "AOÛT", "SEPTEMBRE", "OCTOBRE", "NOVEMBRE", "DÉCEMBRE"];
 
   return (
-    <div className="bg-[#131313] min-h-screen text-[#E5E2E1] font-body selection:bg-primary/30">
+    <div className="bg-background min-h-screen text-on-surface font-body selection:bg-primary/30">
       
       {/* Top Main Navigation Header (matches global shell view in mock) */}
-      <header className="flex justify-between items-center px-6 py-4 border-b border-outline/5 bg-[#1C1B1B]">
+      <header className="flex justify-between items-center px-6 py-4 border-b border-outline-variant/20 bg-surface-container-low">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden border border-outline/20">
             {/* Mock Avatar */}
@@ -57,7 +57,7 @@ const ProductionCalendar: React.FC = () => {
         </div>
         <div className="relative">
           <Icon name="notifications" className="text-primary text-xl" />
-          <span className="absolute top-0 right-0 w-2 h-2 bg-[#FF8888] rounded-full border-2 border-[#1C1B1B]"></span>
+          <span className="absolute top-0 right-0 w-2 h-2 bg-error rounded-full border-2 border-[#1C1B1B]"></span>
         </div>
       </header>
 
@@ -66,22 +66,22 @@ const ProductionCalendar: React.FC = () => {
         {/* Page Header */}
         <div className="flex justify-between items-start mb-10">
           <div className="flex flex-col">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D0C5AF] mb-1">Supervision</span>
-            <h2 className="font-headline text-4xl font-extrabold tracking-tight leading-none text-white">Calendrier de<br/>Production</h2>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant mb-1">Supervision</span>
+            <h2 className="font-headline text-4xl font-extrabold tracking-tight leading-none text-on-surface">Calendrier de<br/>Production</h2>
           </div>
-          <div className="bg-[#1C1B1B] border border-outline/10 rounded-2xl px-4 py-2 flex items-center gap-2 shadow-lg">
+          <div className="bg-surface-container-low border border-outline/10 rounded-2xl px-4 py-2 flex items-center gap-2 shadow-lg">
             <Icon name="location_on" className="text-primary text-sm" />
             <span className="text-xs font-bold text-on-surface">Site A-12</span>
           </div>
         </div>
 
         {/* Month Selector */}
-        <div className="bg-[#1C1B1B] rounded-full flex justify-between items-center px-4 py-3 mb-8 shadow-sm">
-          <button onClick={handlePrevMonth} className="text-on-surface-variant hover:text-white transition-colors">
+        <div className="bg-surface-container-low rounded-full flex justify-between items-center px-4 py-3 mb-8 shadow-sm">
+          <button onClick={handlePrevMonth} className="text-on-surface-variant hover:text-on-surface transition-colors">
             <Icon name="chevron_left" />
           </button>
           <span className="font-headline text-sm font-bold uppercase tracking-widest text-primary">{monthNames[month]} {year}</span>
-          <button onClick={handleNextMonth} className="text-on-surface-variant hover:text-white transition-colors">
+          <button onClick={handleNextMonth} className="text-on-surface-variant hover:text-on-surface transition-colors">
             <Icon name="chevron_right" />
           </button>
         </div>
@@ -89,7 +89,7 @@ const ProductionCalendar: React.FC = () => {
         {/* Days Header */}
         <div className="grid grid-cols-7 gap-2 mb-4 text-center">
           {['LUN', 'MAR', 'MER', 'JEU', 'VEN', 'SAM', 'DIM'].map(d => (
-            <div key={d} className="text-[9px] font-bold text-[#D0C5AF] uppercase tracking-widest">{d}</div>
+            <div key={d} className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">{d}</div>
           ))}
         </div>
         
@@ -100,8 +100,8 @@ const ProductionCalendar: React.FC = () => {
           ))}
           
           {days.map(d => {
-            let bgClass = "bg-[#1C1B1B]"; // default surface_container_low
-            let textClass = "text-[#D0C5AF]";
+            let bgClass = "bg-surface-container-low"; // default surface_container_low
+            let textClass = "text-on-surface-variant";
             let borderClass = "";
             let glowClass = "";
 
@@ -113,13 +113,13 @@ const ProductionCalendar: React.FC = () => {
               textClass = "text-[#131313]";
             } else if (d.state === 'low') {
               bgClass = "bg-[#4D4222]";
-              textClass = "text-[#D0C5AF]";
+              textClass = "text-on-surface-variant";
             } else if (d.state === 'closed') {
               bgClass = "bg-[repeating-linear-gradient(-45deg,#1C1B1B,#1C1B1B_4px,#262423_4px,#262423_8px)]";
-              textClass = "text-[#D0C5AF] opacity-50";
+              textClass = "text-on-surface-variant opacity-50";
             } else if (d.state === 'unvalidated') {
               bgClass = "bg-transparent";
-              textClass = "text-[#F2CA50]";
+              textClass = "text-primary";
               borderClass = "border border-dashed border-[#F2CA50]";
             }
 
@@ -138,7 +138,7 @@ const ProductionCalendar: React.FC = () => {
               >
                 {d.day}
                 {d.incident && (
-                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#FF8888] border-2 border-[#131313]"></span>
+                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-error border-2 border-[#131313]"></span>
                 )}
               </button>
             );
@@ -146,70 +146,70 @@ const ProductionCalendar: React.FC = () => {
         </div>
 
         {/* Visual Legend */}
-        <section className="bg-[#1C1B1B] p-6 rounded-[24px] mb-8">
-          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D0C5AF] mb-5">Légende Visuelle</h3>
+        <section className="bg-surface-container-low p-6 rounded-[24px] mb-8">
+          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant mb-5">Légende Visuelle</h3>
           <div className="grid grid-cols-2 gap-y-4 gap-x-2">
             <div className="flex items-center gap-3">
               <div className="w-[18px] h-[18px] rounded-[6px] bg-[#F2CA50]"></div>
-              <span className="text-[9px] font-bold uppercase tracking-widest text-[#D0C5AF]">Haut Rendement</span>
+              <span className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">Haut Rendement</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-[18px] h-[18px] rounded-[6px] bg-[repeating-linear-gradient(-45deg,#1C1B1B,#1C1B1B_3px,#262423_3px,#262423_6px)] border border-outline/10"></div>
-              <span className="text-[9px] font-bold uppercase tracking-widest text-[#D0C5AF]">Site Fermé</span>
+              <span className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">Site Fermé</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-[18px] h-[18px] rounded-[6px] bg-[#A58835]"></div>
-              <span className="text-[9px] font-bold uppercase tracking-widest text-[#D0C5AF]">Rendement Moyen</span>
+              <span className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">Rendement Moyen</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-[18px] h-[18px] rounded-[6px] bg-transparent flex items-start justify-end pr-0.5 pt-0.5">
-                <span className="w-2 h-2 rounded-full bg-[#FF8888]"></span>
+                <span className="w-2 h-2 rounded-full bg-error"></span>
               </div>
-              <span className="text-[9px] font-bold uppercase tracking-widest text-[#D0C5AF]">Incident</span>
+              <span className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">Incident</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-[18px] h-[18px] rounded-[6px] bg-[#4D4222]"></div>
-              <span className="text-[9px] font-bold uppercase tracking-widest text-[#D0C5AF]">Faible Rendement</span>
+              <span className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">Faible Rendement</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-[18px] h-[18px] rounded-[6px] bg-transparent border border-dashed border-[#F2CA50]"></div>
-              <span className="text-[9px] font-bold uppercase tracking-widest text-[#D0C5AF]">Non Validé</span>
+              <span className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">Non Validé</span>
             </div>
           </div>
         </section>
 
         {/* Monthly Aggregate */}
         <section className="mb-12">
-          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D0C5AF] mb-4">Bilan Mensuel</h3>
+          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant mb-4">Bilan Mensuel</h3>
           <div className="grid grid-cols-2 gap-4">
             {/* Total Production Card */}
-            <div className="bg-[#1C1B1B] p-5 rounded-[24px]">
-              <p className="text-[8px] font-bold uppercase tracking-widest text-[#D0C5AF] mb-3">Production Totale</p>
-              <p className="font-headline text-xl text-[#F2CA50] font-bold tracking-tight mb-3">34,120.00 g</p>
+            <div className="bg-surface-container-low p-5 rounded-[24px]">
+              <p className="text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-3">Production Totale</p>
+              <p className="font-headline text-xl text-primary font-bold tracking-tight mb-3">34,120.00 g</p>
               <div className="h-1 bg-outline/10 rounded-full w-full overflow-hidden flex">
                 <div className="h-full bg-[#F2CA50] w-[75%]"></div>
               </div>
             </div>
 
             {/* Validation Rate Card */}
-            <div className="bg-[#1C1B1B] p-5 rounded-[24px]">
-              <p className="text-[8px] font-bold uppercase tracking-widest text-[#D0C5AF] mb-3">Taux de Validation</p>
+            <div className="bg-surface-container-low p-5 rounded-[24px]">
+              <p className="text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-3">Taux de Validation</p>
               <p className="font-headline text-2xl text-[#BFCDFF] font-bold tracking-tight mb-1">98.2%</p>
-              <p className="text-[8px] uppercase tracking-widest text-[#D0C5AF] opacity-70">Dépasse l'Objectif</p>
+              <p className="text-[8px] uppercase tracking-widest text-on-surface-variant opacity-70">Dépasse l'Objectif</p>
             </div>
 
             {/* Incidents Card */}
-            <div className="bg-[#1C1B1B] p-5 rounded-[24px]">
-              <p className="text-[8px] font-bold uppercase tracking-widest text-[#D0C5AF] mb-3">Incidents</p>
-              <p className="font-headline text-xl text-[#FF8888] font-bold tracking-tight mb-1">4 Jours</p>
-              <p className="text-[8px] uppercase tracking-widest text-[#D0C5AF] opacity-70">-12% par rap. Sept</p>
+            <div className="bg-surface-container-low p-5 rounded-[24px]">
+              <p className="text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-3">Incidents</p>
+              <p className="font-headline text-xl text-error font-bold tracking-tight mb-1">4 Jours</p>
+              <p className="text-[8px] uppercase tracking-widest text-on-surface-variant opacity-70">-12% par rap. Sept</p>
             </div>
 
             {/* Closures Card */}
-            <div className="bg-[#1C1B1B] p-5 rounded-[24px]">
-              <p className="text-[8px] font-bold uppercase tracking-widest text-[#D0C5AF] mb-3">Fermetures</p>
-              <p className="font-headline text-xl text-white font-bold tracking-tight mb-1">2 Jours</p>
-              <p className="text-[8px] uppercase tracking-widest text-[#D0C5AF] opacity-70">Maintenance</p>
+            <div className="bg-surface-container-low p-5 rounded-[24px]">
+              <p className="text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-3">Fermetures</p>
+              <p className="font-headline text-xl text-on-surface font-bold tracking-tight mb-1">2 Jours</p>
+              <p className="text-[8px] uppercase tracking-widest text-on-surface-variant opacity-70">Maintenance</p>
             </div>
           </div>
         </section>
@@ -218,7 +218,7 @@ const ProductionCalendar: React.FC = () => {
 
       {/* Selected Day Bottom Sheet Replica */}
       {isPopupOpen && (
-        <div className="fixed bottom-16 md:bottom-0 left-0 right-0 bg-[#1C1B1B] rounded-t-[32px] p-8 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] z-30 max-w-7xl mx-auto md:max-w-md md:left-auto md:right-8 border-t border-outline/5 transition-all animate-in slide-in-from-bottom-full duration-300">
+        <div className="fixed bottom-16 md:bottom-0 left-0 right-0 bg-surface-container-low rounded-t-[32px] p-8 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] z-30 max-w-7xl mx-auto md:max-w-md md:left-auto md:right-8 border-t border-outline-variant/20 transition-all animate-in slide-in-from-bottom-full duration-300">
           <button 
             onClick={() => setIsPopupOpen(false)}
             className="w-12 h-6 mx-auto absolute top-0 left-1/2 -translate-x-1/2 flex items-center justify-center cursor-pointer group hover:bg-white/5 rounded-b-lg transition-colors"
@@ -228,12 +228,12 @@ const ProductionCalendar: React.FC = () => {
           
           <div className="flex justify-between items-start mb-6 mt-2">
             <div>
-              <h2 className="font-headline text-2xl font-bold tracking-tight text-white mb-1">
+              <h2 className="font-headline text-2xl font-bold tracking-tight text-on-surface mb-1">
                 {new Date(year, month, selectedDay).toLocaleDateString('fr-FR', { weekday: 'long', month: 'short', day: 'numeric' })}
               </h2>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#F2CA50]">Pic de Production</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">Pic de Production</p>
             </div>
-            <button onClick={() => setIsPopupOpen(false)} className="px-3 py-1 rounded-full border border-[#F2CA50]/30 bg-[#F2CA50]/10 text-[#F2CA50] text-[8px] font-bold tracking-widest uppercase hover:bg-[#F2CA50]/20 transition-colors cursor-pointer">
+            <button onClick={() => setIsPopupOpen(false)} className="px-3 py-1 rounded-full border border-[#F2CA50]/30 bg-[#F2CA50]/10 text-primary text-[8px] font-bold tracking-widest uppercase hover:bg-[#F2CA50]/20 transition-colors cursor-pointer">
               Fermer / Valider
             </button>
           </div>
@@ -242,12 +242,12 @@ const ProductionCalendar: React.FC = () => {
             {/* Total Prod */}
             <div className="bg-[#242323] p-4 rounded-2xl flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="bg-[#F2CA50]/10 p-2 rounded-lg text-[#F2CA50]">
+                <div className="bg-[#F2CA50]/10 p-2 rounded-lg text-primary">
                   <Icon name="analytics" className="text-sm" />
                 </div>
-                <span className="text-xs font-bold text-[#E5E2E1]">Production Totale</span>
+                <span className="text-xs font-bold text-on-surface">Production Totale</span>
               </div>
-              <span className="font-headline text-base font-bold text-white">1,248.50 g</span>
+              <span className="font-headline text-base font-bold text-on-surface">1,248.50 g</span>
             </div>
 
             {/* Validation Status */}
@@ -257,8 +257,8 @@ const ProductionCalendar: React.FC = () => {
                   <Icon name="verified_user" className="text-sm" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xs font-bold text-[#E5E2E1] leading-tight">Statut de Validation</span>
-                  <span className="text-[9px] text-[#D0C5AF] leading-tight mt-0.5">Superviseur: M. Sterling</span>
+                  <span className="text-xs font-bold text-on-surface leading-tight">Statut de Validation</span>
+                  <span className="text-[9px] text-on-surface-variant leading-tight mt-0.5">Superviseur: M. Sterling</span>
                 </div>
               </div>
               <span className="text-[8px] uppercase tracking-widest text-[#BFCDFF] font-bold">En Attente de Signature</span>
@@ -267,19 +267,19 @@ const ProductionCalendar: React.FC = () => {
             {/* Splitted Box */}
             <div className="flex gap-3">
               <div className="bg-[#242323] p-4 rounded-2xl flex items-center gap-3 flex-1">
-                <Icon name="history_edu" className="text-[#D0C5AF] text-base" />
+                <Icon name="history_edu" className="text-on-surface-variant text-base" />
                 <div className="flex flex-col">
-                  <span className="text-[9px] uppercase tracking-widest text-[#E5E2E1] font-bold">Registres</span>
-                  <span className="text-xs text-white">8 entrées</span>
+                  <span className="text-[9px] uppercase tracking-widest text-on-surface font-bold">Registres</span>
+                  <span className="text-xs text-on-surface">8 entrées</span>
                 </div>
               </div>
               <div className="bg-[#242323] p-4 rounded-2xl flex items-center gap-3 flex-1">
-                <div className="bg-[#FF8888] w-4 h-4 rounded-full flex items-center justify-center text-[#242323]">
+                <div className="bg-error w-4 h-4 rounded-full flex items-center justify-center text-[#242323]">
                   <Icon name="priority_high" className="text-[10px]" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[9px] uppercase tracking-widest text-[#E5E2E1] font-bold">Incidents</span>
-                  <span className="text-xs text-white">1 signalé</span>
+                  <span className="text-[9px] uppercase tracking-widest text-on-surface font-bold">Incidents</span>
+                  <span className="text-xs text-on-surface">1 signalé</span>
                 </div>
               </div>
             </div>

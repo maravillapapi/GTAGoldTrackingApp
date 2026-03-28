@@ -48,12 +48,16 @@ export interface Expense {
   equipmentId?: string;
 }
 
+export type SaleStatus = 'PENDING' | 'COMPLETED' | 'CANCELLED';
+
 export interface Sale {
   id: string;
   date: string;
   amountGrams: number;
-  pricePerGram: number;
-  buyer: string;
+  unitPrice: number;
+  companyName: string;
+  status: SaleStatus;
+  notes?: string;
   receiptImageUrl?: string;
 }
 
@@ -111,11 +115,28 @@ export const initialIncidents: Incident[] = [
 export const initialSales: Sale[] = [
   {
     id: 'sale-1',
-    date: '2026-03-20',
-    amountGrams: 15000,
-    pricePerGram: 64.5,
-    buyer: 'Global Metals Corp',
-  }
+    date: '2026-10-28',
+    amountGrams: 850,
+    unitPrice: 65.00,
+    companyName: 'Aurum Métaux Précieux',
+    status: 'COMPLETED',
+  },
+  {
+    id: 'sale-2',
+    date: '2026-10-26',
+    amountGrams: 1200,
+    unitPrice: 65.00,
+    companyName: 'Corp. Raffineurs Mondiaux',
+    status: 'PENDING',
+  },
+  {
+    id: 'sale-3',
+    date: '2026-10-22',
+    amountGrams: 500,
+    unitPrice: 64.60,
+    companyName: 'Swiss Heritage Mint',
+    status: 'COMPLETED',
+  },
 ];
 
 export const initialExpenses: Expense[] = [

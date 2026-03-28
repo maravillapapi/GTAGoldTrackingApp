@@ -25,7 +25,7 @@ const ProductionDayDetail: React.FC = () => {
 
   return (
     <>
-      <header className="bg-[#131313] text-on-surface font-headline font-bold uppercase sticky top-0 z-40 bg-opacity-90 backdrop-blur-md border-b border-outline/10">
+      <header className="bg-background text-on-surface font-headline font-bold uppercase sticky top-0 z-40 bg-opacity-90 backdrop-blur-md border-b border-outline/10">
         <div className="flex justify-between items-center w-full px-6 py-4">
           <div className="flex items-center gap-4">
             <button onClick={() => navigate('/production/calendar')} className="text-on-surface-variant hover:text-on-surface transition-colors pb-1">
@@ -61,7 +61,7 @@ const ProductionDayDetail: React.FC = () => {
 
           <div className="space-y-3">
              {shifts.map((s, idx) => (
-               <div key={idx} className="bg-surface-container-low p-4 rounded-xl flex justify-between items-center border border-outline/5 hover:bg-surface-container-highest transition-colors">
+               <div key={idx} className="bg-surface-container-low p-4 rounded-xl flex justify-between items-center border border-outline-variant/20 hover:bg-surface-container-highest transition-colors">
                  <div className="flex flex-col">
                    <h4 className="font-bold text-sm text-on-surface leading-tight">{s.team}</h4>
                    <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mt-0.5">{s.shift}</span>

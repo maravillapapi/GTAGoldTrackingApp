@@ -4,14 +4,14 @@ import { Icon } from '../components/Icon';
 import { useAppContext } from '../contexts/AppContext';
 
 const Home: React.FC = () => {
-  const { role } = useAppContext();
+  const { role, setIsMenuOpen } = useAppContext();
 
   return (
     <>
-      <header className="bg-[#131313] font-headline font-bold docked full-width top-0 sticky z-50 border-b border-white/5">
+      <header className="bg-background font-headline font-bold docked full-width top-0 sticky z-50 border-b border-outline-variant/10">
         <div className="flex justify-between items-center w-full px-6 py-4">
           <div className="flex items-center gap-4">
-            <button className="text-on-surface-variant hover:text-primary transition-colors">
+            <button onClick={() => setIsMenuOpen(true)} className="text-on-surface-variant hover:text-primary transition-colors">
               <Icon name="menu" />
             </button>
             <div className="flex items-center gap-2">
@@ -32,7 +32,7 @@ const Home: React.FC = () => {
             <div className="bg-surface-container-highest px-3 py-1 rounded-full border border-outline-variant/20">
                <span className="text-[10px] font-bold tracking-tighter text-primary uppercase">{role === 'ADMIN' ? 'Administrateur' : role === 'SUPERVISOR' ? 'Superviseur' : 'Observateur'}</span>
             </div>
-            <Link to="/profile" className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center border border-white/10 hover:bg-surface-bright transition-colors decoration-transparent">
+            <Link to="/profile" className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center border border-outline-variant/20 hover:bg-surface-bright transition-colors decoration-transparent">
               <Icon name="person" className="text-sm opacity-70 text-on-surface" />
             </Link>
           </div>
@@ -47,7 +47,7 @@ const Home: React.FC = () => {
           </div>
         </div>
 
-        <section className="bg-surface-container-low p-4 rounded-2xl border border-white/5">
+        <section className="bg-surface-container-low p-4 rounded-2xl border border-outline-variant/10">
           <h2 className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-3">Aujourd'hui</h2>
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2 text-xs font-medium text-green-500">
@@ -92,29 +92,29 @@ const Home: React.FC = () => {
         </section>
 
         <section className="grid grid-cols-2 gap-4">
-          <Link to="/inventory" className="bg-surface-container-low p-4 rounded-2xl space-y-1 col-span-2 flex justify-between items-center border border-white/5 decoration-transparent">
+          <Link to="/inventory" className="bg-surface-container-low p-4 rounded-2xl space-y-1 col-span-2 flex justify-between items-center border border-outline-variant/10 decoration-transparent">
             <div>
               <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Stock actuel</p>
               <p className="font-headline text-2xl text-primary font-bold">42 850 g <span className="text-sm font-medium text-on-surface-variant ml-1">(42,85 kg)</span></p>
             </div>
             <Icon name="inventory_2" className="text-on-surface-variant/40 text-4xl" />
           </Link>
-          <div className="bg-surface-container-low p-4 rounded-2xl border border-white/5">
+          <div className="bg-surface-container-low p-4 rounded-2xl border border-outline-variant/10">
             <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Ventes&nbsp;<div>mensuelles</div></p>
             <p className="font-headline text-xl text-primary font-bold">1,42 M $</p>
           </div>
-          <div className="bg-surface-container-low p-4 rounded-2xl border border-white/5">
+          <div className="bg-surface-container-low p-4 rounded-2xl border border-outline-variant/10">
             <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Dépenses mensuelles</p>
             <p className="font-headline text-xl text-error font-bold">842 K $</p>
           </div>
-          <div className="bg-surface-container-low p-4 rounded-2xl space-y-2 border border-white/5 col-span-1">
+          <div className="bg-surface-container-low p-4 rounded-2xl space-y-2 border border-outline-variant/10 col-span-1">
             <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Production semaine</p>
             <p className="font-headline text-xl text-primary font-bold">8 642 g</p>
             <div className="h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
               <div className="h-full bg-primary w-[72%]"></div>
             </div>
           </div>
-          <div className="bg-surface-container-low p-4 rounded-2xl space-y-2 border border-white/5 col-span-1">
+          <div className="bg-surface-container-low p-4 rounded-2xl space-y-2 border border-outline-variant/10 col-span-1">
             <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Production mensuelle</p>
             <p className="font-headline text-xl text-primary font-bold">34 120 g</p>
             <div className="h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
@@ -130,15 +130,15 @@ const Home: React.FC = () => {
               <Icon name="add_circle" className="text-on-primary" />
               <span className="text-[10px] font-bold uppercase text-center leading-tight text-on-primary">Ajouter<br/>production</span>
             </Link>
-            <Link to="/sales" className="flex-shrink-0 w-32 bg-surface-container-highest p-4 rounded-2xl flex flex-col items-center gap-2 border border-white/5 decoration-transparent hover:bg-surface-bright transition-colors">
+            <Link to="/sales" className="flex-shrink-0 w-32 bg-surface-container-highest p-4 rounded-2xl flex flex-col items-center gap-2 border border-outline-variant/10 decoration-transparent hover:bg-surface-bright transition-colors">
               <Icon name="sell" className="text-primary" />
               <span className="text-[10px] font-bold uppercase text-center leading-tight text-on-surface">Ajouter<br/>vente</span>
             </Link>
-            <Link to="/incidents" className="flex-shrink-0 w-32 bg-surface-container-highest p-4 rounded-2xl flex flex-col items-center gap-2 border border-white/5 decoration-transparent hover:bg-surface-bright transition-colors">
+            <Link to="/incidents" className="flex-shrink-0 w-32 bg-surface-container-highest p-4 rounded-2xl flex flex-col items-center gap-2 border border-outline-variant/10 decoration-transparent hover:bg-surface-bright transition-colors">
               <Icon name="report_problem" className="text-error" />
               <span className="text-[10px] font-bold uppercase text-center leading-tight text-on-surface">Signaler<br/>incident</span>
             </Link>
-            <Link to="/expenses" className="flex-shrink-0 w-32 bg-surface-container-highest p-4 rounded-2xl flex flex-col items-center gap-2 border border-white/5 opacity-80 hover:opacity-100 decoration-transparent hover:bg-surface-bright transition-colors">
+            <Link to="/expenses" className="flex-shrink-0 w-32 bg-surface-container-highest p-4 rounded-2xl flex flex-col items-center gap-2 border border-outline-variant/10 opacity-80 hover:opacity-100 decoration-transparent hover:bg-surface-bright transition-colors">
               <Icon name="payments" className="text-primary" />
               <span className="text-[10px] font-bold uppercase text-center leading-tight text-on-surface">Ajouter<br/>dépense</span>
             </Link>
@@ -176,12 +176,12 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        <section className="bg-surface-container-low p-5 rounded-2xl space-y-6 mb-8 border border-white/5">
+        <section className="bg-surface-container-low p-5 rounded-2xl space-y-6 mb-8 border border-outline-variant/10">
           <div className="flex justify-between items-baseline">
             <h2 className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Tendance sur 7 jours</h2>
             <p className="text-[10px] text-on-surface-variant/60 font-medium">18 oct — 24 oct 2023</p>
           </div>
-          <div className="bg-surface-container-low p-1 rounded-xl flex gap-1 overflow-x-auto no-scrollbar border border-white/5">
+          <div className="bg-surface-container-low p-1 rounded-xl flex gap-1 overflow-x-auto no-scrollbar border border-outline-variant/10">
             <button className="flex-1 whitespace-nowrap px-3 py-2 rounded-lg text-[9px] font-bold uppercase transition-all bg-primary text-on-primary shadow-sm">JOUR VS J-1</button>
             <button className="flex-1 whitespace-nowrap px-3 py-2 rounded-lg text-[9px] font-bold uppercase transition-all text-on-surface-variant bg-surface-container-highest/30 hover:bg-surface-bright">Moyenne semaine</button>
             <button className="flex-1 whitespace-nowrap px-3 py-2 rounded-lg text-[9px] font-bold uppercase transition-all text-on-surface-variant bg-surface-container-highest/30 hover:bg-surface-bright">Moyenne mensuelle</button>
@@ -191,10 +191,10 @@ const Home: React.FC = () => {
           
           <div className="relative flex h-72 w-full gap-2 pt-12 pb-16">
             <div className="absolute left-0 top-12 bottom-16 w-full flex flex-col justify-between pointer-events-none">
-              <div className="w-full border-t border-white/5 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">1,5 kg</span></div>
-              <div className="w-full border-t border-white/5 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">1,0 kg</span></div>
-              <div className="w-full border-t border-white/5 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">0,5 kg</span></div>
-              <div className="w-full border-t border-white/5 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">0</span></div>
+              <div className="w-full border-t border-outline-variant/10 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">1,5 kg</span></div>
+              <div className="w-full border-t border-outline-variant/10 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">1,0 kg</span></div>
+              <div className="w-full border-t border-outline-variant/10 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">0,5 kg</span></div>
+              <div className="w-full border-t border-outline-variant/10 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">0</span></div>
             </div>
 
             <div className="flex-1 flex flex-col items-center justify-end relative z-10">
@@ -268,7 +268,7 @@ const Home: React.FC = () => {
           </div>
 
           <div className="pt-12 flex justify-center">
-            <div className="bg-surface-container-highest/50 px-4 py-2 rounded-full border border-white/5">
+            <div className="bg-surface-container-highest/50 px-4 py-2 rounded-full border border-outline-variant/10">
               <span className="text-[10px] text-on-surface-variant font-medium uppercase tracking-widest mr-2">Production moyenne :</span>
               <span className="text-xs font-bold text-primary">1 120 g</span>
             </div>

@@ -25,7 +25,7 @@ const IncidentDetail: React.FC = () => {
 
   return (
     <>
-      <header className="bg-[#131313] text-on-surface font-headline font-bold uppercase sticky top-0 z-40 bg-opacity-90 backdrop-blur-md border-b border-outline/10">
+      <header className="bg-background text-on-surface font-headline font-bold uppercase sticky top-0 z-40 bg-opacity-90 backdrop-blur-md border-b border-outline/10">
         <div className="flex justify-between items-center w-full px-6 py-4">
           <div className="flex items-center gap-4">
             <button onClick={() => navigate('/incidents')} className="text-on-surface-variant hover:text-on-surface transition-colors pb-1">
@@ -57,19 +57,19 @@ const IncidentDetail: React.FC = () => {
           <div className="space-y-4">
             <h3 className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Impact Opérationnel</h3>
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-surface-container-highest p-3 rounded-xl border border-outline/5 border-l-2 border-l-error">
+              <div className="bg-surface-container-highest p-3 rounded-xl border border-outline-variant/20 border-l-2 border-l-error">
                 <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">Perte de Production</p>
                 <p className="font-headline font-bold text-lg text-error">450 g</p>
               </div>
-              <div className="bg-surface-container-highest p-3 rounded-xl border border-outline/5 border-l-2 border-l-error">
+              <div className="bg-surface-container-highest p-3 rounded-xl border border-outline-variant/20 border-l-2 border-l-error">
                 <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">Impact Financier</p>
                 <p className="font-headline font-bold text-lg text-error">$12,400</p>
               </div>
-              <div className="bg-surface-container-highest p-3 rounded-xl border border-outline/5">
+              <div className="bg-surface-container-highest p-3 rounded-xl border border-outline-variant/20">
                 <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">Durée</p>
                 <p className="font-headline font-bold text-sm">2h 15m</p>
               </div>
-              <div className="bg-surface-container-highest p-3 rounded-xl border border-outline/5">
+              <div className="bg-surface-container-highest p-3 rounded-xl border border-outline-variant/20">
                 <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">Actif Lié</p>
                 <p className="font-headline font-bold text-[11px] truncate uppercase">{relatedEquipment ? relatedEquipment.name : 'N/A'}</p>
               </div>
@@ -97,7 +97,7 @@ const IncidentDetail: React.FC = () => {
             
             <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
               <div className="flex items-center justify-center w-6 h-6 rounded-full border-4 border-surface-container-low bg-primary text-surface-container-low shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow whitespace-nowrap z-10"></div>
-              <div className="w-[calc(100%-3rem)] md:w-[calc(50%-1.5rem)] bg-surface-container-highest p-4 rounded-xl border border-outline/5">
+              <div className="w-[calc(100%-3rem)] md:w-[calc(50%-1.5rem)] bg-surface-container-highest p-4 rounded-xl border border-outline-variant/20">
                 <div className="flex items-center justify-between space-x-2 mb-1">
                   <div className="font-bold text-xs uppercase tracking-widest text-primary">Note du Superviseur</div>
                 </div>
@@ -108,7 +108,7 @@ const IncidentDetail: React.FC = () => {
 
             <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
               <div className="flex items-center justify-center w-6 h-6 rounded-full border-4 border-surface-container-low bg-surface-container-highest text-on-surface-variant shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow whitespace-nowrap z-10"></div>
-              <div className="w-[calc(100%-3rem)] md:w-[calc(50%-1.5rem)] bg-surface-container-highest p-4 rounded-xl border border-outline/5">
+              <div className="w-[calc(100%-3rem)] md:w-[calc(50%-1.5rem)] bg-surface-container-highest p-4 rounded-xl border border-outline-variant/20">
                 <div className="flex items-center justify-between mb-1">
                   <div className="font-bold text-xs uppercase tracking-widest text-on-surface-variant">Changement de Statut</div>
                 </div>

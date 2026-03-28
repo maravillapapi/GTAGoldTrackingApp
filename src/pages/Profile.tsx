@@ -7,7 +7,7 @@ const Profile: React.FC = () => {
 
   return (
     <>
-      <header className="bg-[#131313] text-on-surface font-headline font-bold uppercase sticky top-0 z-40 bg-opacity-90 backdrop-blur-md">
+      <header className="bg-background text-on-surface font-headline font-bold uppercase sticky top-0 z-40 bg-opacity-90 backdrop-blur-md">
         <div className="flex justify-between items-center w-full px-6 py-4">
           <h1 className="text-xl tracking-tight">Contrôle d'Accès</h1>
           <Icon name="person" className="text-on-surface-variant" />

@@ -26,7 +26,7 @@ const Incidents: React.FC = () => {
 
   return (
     <>
-      <header className="bg-[#131313] text-on-surface font-headline font-bold uppercase sticky top-0 z-40 bg-opacity-90 backdrop-blur-md">
+      <header className="bg-background text-on-surface font-headline font-bold uppercase sticky top-0 z-40 bg-opacity-90 backdrop-blur-md">
         <div className="flex justify-between items-center w-full px-6 py-4">
           <div className="flex items-center gap-4">
             <button onClick={() => navigate(-1)} className="text-on-surface-variant hover:text-on-surface transition-colors pb-1">

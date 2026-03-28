@@ -9,6 +9,9 @@ interface AppContextType {
   role: Role;
   setRole: (role: Role) => void;
   
+  isMenuOpen: boolean;
+  setIsMenuOpen: (isOpen: boolean) => void;
+  
   equipment: Equipment[];
   production: ProductionLog[];
   incidents: Incident[];
@@ -29,6 +32,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [role, setRole] = useState<Role>('ADMIN'); // Default to Admin for testing
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   const [equipment] = useState<Equipment[]>(initialEquipment);
   const [production, setProduction] = useState<ProductionLog[]>(initialProduction);
@@ -67,6 +71,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   return (
     <AppContext.Provider value={{
       role, setRole,
+      isMenuOpen, setIsMenuOpen,
       equipment, production, incidents, expenses, sales,
       addProduction, addIncident, addSale, addExpense,
       currentStockGrams

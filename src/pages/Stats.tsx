@@ -8,7 +8,7 @@ const Stats: React.FC = () => {
 
   const totalProduction = production.reduce((acc, p) => acc + p.amountGrams, 0);
   const totalExpenses = expenses.reduce((acc, e) => acc + e.amount, 0);
-  const totalSalesRevenue = sales.reduce((acc, s) => acc + (s.amountGrams * s.pricePerGram), 0);
+  const totalSalesRevenue = sales.reduce((acc, s) => acc + (s.amountGrams * s.unitPrice), 0);
 
   const costPerGram = totalProduction > 0 ? (totalExpenses / totalProduction).toFixed(2) : 0;
   const netMargin = totalSalesRevenue - totalExpenses;
@@ -16,7 +16,7 @@ const Stats: React.FC = () => {
 
   return (
     <>
-      <header className="bg-[#131313] text-on-surface font-headline font-bold uppercase sticky top-0 z-40 bg-opacity-90 backdrop-blur-md">
+      <header className="bg-background text-on-surface font-headline font-bold uppercase sticky top-0 z-40 bg-opacity-90 backdrop-blur-md">
         <div className="flex justify-between items-center w-full px-6 py-4">
           <h1 className="text-xl tracking-tight">Aperçu Financier</h1>
           <Icon name="monitoring" className="text-on-surface-variant" />

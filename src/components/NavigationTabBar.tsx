@@ -4,7 +4,7 @@ import { Icon } from './Icon';
 
 const NavigationTabBar: React.FC = () => {
   return (
-    <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#0E0E0E] rounded-t-[24px] shadow-[0_-4px_40px_rgba(0,0,0,0.4)] border-t border-white/5">
+    <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#0E0E0E] rounded-t-[24px] shadow-[0_-4px_40px_rgba(0,0,0,0.4)] border-t border-outline-variant/10">
       <NavLink 
         to="/" 
         end 

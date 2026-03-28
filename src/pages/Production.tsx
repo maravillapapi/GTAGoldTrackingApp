@@ -1,33 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useAppContext } from '../contexts/AppContext';
 import { Icon } from '../components/Icon';
 import { Link } from 'react-router-dom';
 
 const Production: React.FC = () => {
-  const { production, addProduction, role } = useAppContext();
-  const [form, setForm] = useState({ amountGrams: '', siteLocation: '', notes: '' });
-
-  const isFormValid = form.amountGrams && !isNaN(Number(form.amountGrams)) && form.siteLocation;
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isFormValid || role === 'OBSERVER') return;
-
-    addProduction({
-      date: new Date().toISOString(),
-      amountGrams: Number(form.amountGrams),
-      siteLocation: form.siteLocation,
-      notes: form.notes
-    });
-
-    setForm({ amountGrams: '', siteLocation: '', notes: '' });
-  };
+  const { production, role } = useAppContext();
 
   return (
     <>
-      <header className="bg-[#131313] text-on-surface font-headline font-bold uppercase sticky top-0 z-40 bg-opacity-90 backdrop-blur-md border-b border-outline/10">
+      <header className="bg-surface font-headline font-bold uppercase sticky top-0 z-40 bg-opacity-90 backdrop-blur-md border-b border-outline/10">
         <div className="flex justify-between items-center w-full px-6 py-4">
-          <h1 className="text-xl tracking-tight">Registre de Production</h1>
+          <h1 className="text-xl tracking-tight text-on-surface">Registre de Production</h1>
           <Link to="/production/calendar" className="text-primary hover:text-primary-fixed transition-colors">
             <Icon name="calendar_month" className="text-2xl" />
           </Link>
@@ -35,64 +18,6 @@ const Production: React.FC = () => {
       </header>
 
       <main className="px-6 mt-6 space-y-8 pb-32">
-        {/* Form */}
-        {role !== 'OBSERVER' ? (
-          <section className="bg-surface-container-low p-6 rounded-2xl relative overflow-hidden shadow-lg border border-outline-variant/20">
-            <h2 className="font-headline text-lg font-bold uppercase tracking-widest text-on-surface mb-4">Enregistrer Nouveau Rendement</h2>
-            
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <div className="flex flex-col gap-1">
-                <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest pt-1">Montant (Grammes)</label>
-                <input 
-                  type="number" 
-                  step="0.01"
-                  className="bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-sm font-headline font-bold focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full transition-colors"
-                  placeholder="ex. 150.5" 
-                  value={form.amountGrams} 
-                  onChange={e => setForm({...form, amountGrams: e.target.value})} 
-                  required 
-                />
-              </div>
-              
-              <div className="flex flex-col gap-1">
-                <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest pt-1">Localisation du Site</label>
-                <input 
-                  type="text" 
-                  className="bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-sm font-headline font-bold focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full transition-colors"
-                  placeholder="ex. Fosse Nord" 
-                  value={form.siteLocation} 
-                  onChange={e => setForm({...form, siteLocation: e.target.value})} 
-                  required 
-                />
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest pt-1">Notes de Terrain</label>
-                <textarea 
-                  className="bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-sm font-body focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full h-20 transition-colors"
-                  placeholder="Détails optionnels..." 
-                  value={form.notes} 
-                  onChange={e => setForm({...form, notes: e.target.value})} 
-                ></textarea>
-              </div>
-
-              <button 
-                type="submit" 
-                disabled={!isFormValid}
-                className={`mt-2 p-4 rounded-xl flex items-center justify-center gap-2 font-headline uppercase font-bold text-xs tracking-widest transition-opacity ${isFormValid ? 'metallic-gradient text-[var(--on-primary)] shadow-[0_5px_15px_rgba(242,202,80,0.2)]' : 'bg-surface-container-highest opacity-50 text-on-surface-variant cursor-not-allowed'}`}
-              >
-                <Icon name="check_circle" className={isFormValid ? "text-on-primary" : ""} />
-                Soumettre l'Entrée
-              </button>
-            </form>
-          </section>
-        ) : (
-          <div className="bg-surface-container-highest p-4 rounded-2xl flex items-center gap-3 border border-outline/10 text-on-surface-variant">
-            <Icon name="visibility" className="text-xl" />
-            <p className="text-xs font-bold leading-tight">Mode Observateur. Enregistrement désactivé.</p>
-          </div>
-        )}
-
         {/* History */}
         <section className="space-y-4">
           <div className="flex justify-between items-center mb-6">
@@ -121,6 +46,13 @@ const Production: React.FC = () => {
           </div>
         </section>
       </main>
+
+      {/* Floating Action Button */}
+      {role !== 'OBSERVER' && (
+        <Link to="/production/add" className="fixed bottom-20 md:bottom-10 right-6 w-14 h-14 metallic-gradient rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(242,202,80,0.4)] hover:scale-105 transition-transform z-40">
+          <Icon name="add" className="text-[var(--on-primary)] text-2xl font-bold" />
+        </Link>
+      )}
     </>
   );
 };
