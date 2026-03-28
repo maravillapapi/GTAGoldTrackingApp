@@ -6,11 +6,11 @@ const NavigationTabBar: React.FC<{ hidden?: boolean }> = ({ hidden = false }) =>
   if (hidden) return null;
   
   const tabs = [
-    { name: 'Home', path: '/', icon: 'home_storage' },
+    { name: 'Accueil', path: '/', icon: 'home_storage' },
     { name: 'Production', path: '/production', icon: 'precision_manufacturing' },
-    { name: 'Sales Dashboard', path: '/sales', icon: 'sell' },
-    { name: 'Stats', path: '/stats', icon: 'query_stats' },
-    { name: 'Profile', path: '/profile', icon: 'person' },
+    { name: 'Ventes', path: '/sales', icon: 'sell' },
+    { name: 'Analyses', path: '/stats', icon: 'query_stats' },
+    { name: 'Profil', path: '/profile', icon: 'person' },
   ];
 
   return (

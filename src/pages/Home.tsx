@@ -1,162 +1,231 @@
 import React from 'react';
-import { useAppContext } from '../contexts/AppContext';
-import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
+import { Link } from 'react-router-dom';
 
 const Home: React.FC = () => {
-  const { currentStockGrams, production, incidents, role, expenses, sales, equipment } = useAppContext();
-
-  const todayProduction = production
-    .filter(p => new Date(p.date).toDateString() === new Date().toDateString())
-    .reduce((sum, p) => sum + p.amountGrams, 0);
-
-  const activeIncidents = incidents.filter(i => i.status !== 'CLOSED');
-  
-  const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
-  const totalSalesRevenue = sales.reduce((sum, s) => sum + (s.amountGrams * s.pricePerGram), 0);
-  
-  const nonOpEquip = equipment.filter(e => e.operationalStatus !== 'FUNCTIONAL' && e.operationalStatus !== 'INACTIVE').length;
-
   return (
-    <>
-      <header className="bg-[#131313] text-[#D4AF37] font-headline font-bold tracking-tight uppercase sticky top-0 z-40 bg-opacity-90 backdrop-blur-md">
-        <div className="flex justify-between items-center w-full px-6 py-4">
-          <div className="flex items-center gap-3">
-            <Icon name="location_on" className="text-[#D4AF37]" />
-            <div className="flex flex-col leading-none pt-1">
-              <span className="text-[10px] text-on-surface-variant font-medium tracking-normal normal-case">Operational Site</span>
-              <span className="text-sm tracking-widest text-[#D4AF37]">Alpha-01 North</span>
-            </div>
+    <div className="bg-[#131313] min-h-screen text-[#E5E2E1] font-body selection:bg-primary/30">
+      
+      {/* Top Header */}
+      <header className="flex justify-between items-center px-6 pt-6 pb-2">
+        <div className="flex items-center gap-3">
+          <Icon name="location_on" className="text-[#F2CA50] text-xl" />
+          <div className="flex flex-col">
+            <span className="text-[9px] text-[#D0C5AF]">Site Opérationnel</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#F2CA50]">ALPHA-01 NORD</span>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="bg-surface-container-highest px-3 py-1 rounded-full border border-outline-variant/20 pt-1.5">
-              <span className="text-[10px] font-bold tracking-tighter text-primary uppercase">{role}</span>
-            </div>
-            <div className="relative">
-              <Icon name="notifications" className="text-[#D4AF37]" />
-              {activeIncidents.length > 0 && (
-                <span className="absolute top-0 right-0 w-2 h-2 bg-error rounded-full ring-2 ring-background"></span>
-              )}
-            </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="bg-[#242323] border border-outline/10 rounded-full px-4 py-1.5 flex items-center">
+            <span className="text-[9px] font-bold uppercase tracking-widest text-[#D0C5AF]">ADMIN</span>
+          </div>
+          <div className="relative">
+            <Icon name="notifications" className="text-[#F2CA50] text-xl" />
+            <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#F2CA50] rounded-full border-2 border-[#131313]"></span>
           </div>
         </div>
       </header>
 
-      <main className="px-6 mt-2 space-y-8">
-        <div className="flex justify-between items-end">
-          <div>
-            <p className="text-on-surface-variant text-sm font-medium">{new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' })}</p>
-            <h1 className="font-headline text-3xl font-extrabold tracking-tight">Executive Summary</h1>
+      <main className="px-6 mt-6 max-w-lg mx-auto md:max-w-2xl pb-32">
+        
+        {/* Page Header */}
+        <div className="flex flex-col mb-8">
+          <span className="text-xs font-bold text-[#b4a996] mb-1">Lundi 24 Oct 2023</span>
+          <h1 className="font-headline text-[32px] font-extrabold tracking-tight leading-none text-white">Synthèse Exécutive</h1>
+        </div>
+
+        {/* Primary KPI Card */}
+        <div className="bg-[#F2CA50] rounded-[24px] p-6 text-[#131313] shadow-[0_10px_40px_rgba(242,202,80,0.15)] mb-4 relative overflow-hidden group">
+          <div className="absolute -right-12 -top-12 w-48 h-48 bg-white opacity-10 rounded-full blur-2xl group-hover:scale-110 transition-transform duration-700"></div>
+          
+          <div className="flex justify-between items-start mb-2 relative z-10">
+            <h2 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#131313]/70">Production du Jour</h2>
+            <Icon name="trending_up" className="text-[#131313] opacity-80" />
+          </div>
+          
+          <div className="flex items-baseline gap-2 mb-6 relative z-10">
+            <span className="font-headline text-[44px] font-black tracking-tighter leading-none">1,248.50</span>
+            <span className="font-headline text-2xl font-bold">g</span>
+          </div>
+          
+          <div className="flex justify-between items-end relative z-10">
+            <div className="bg-[#131313]/10 px-3 py-1.5 rounded-[8px]">
+              <span className="text-[10px] font-bold text-[#131313]">≈ 1.25 kg AU</span>
+            </div>
+            <Link to="/production/2023-10-24" className="text-[11px] font-extrabold text-[#131313] border-b-2 border-[#131313] pb-0.5 hover:opacity-70 transition-opacity">
+              Voir Détails
+            </Link>
           </div>
         </div>
 
-        {/* Hero KPI */}
-        <section className="relative overflow-hidden rounded-2xl p-6 metallic-gradient text-on-primary shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
-          <div className="flex justify-between items-start mb-2 relative z-10">
-            <p className="font-label text-xs font-bold uppercase tracking-[0.1em] opacity-80 pt-1">Today's Production</p>
-            <Icon name="trending_up" className="opacity-70" />
-          </div>
-          <div className="flex items-baseline gap-2 relative z-10">
-            <span className="font-headline text-5xl font-black tracking-tighter">{todayProduction.toLocaleString()}</span>
-            <span className="font-headline text-xl font-bold opacity-90">g</span>
-          </div>
-          <div className="mt-4 flex items-center justify-between relative z-10">
-            <span className="bg-on-primary/10 px-3 py-1.5 rounded-full text-[12px] font-bold">≈ {(todayProduction/1000).toFixed(2)} kg AU</span>
-            <Link to="/production" className="text-xs font-bold underline underline-offset-4 decoration-2 pt-1">View Details</Link>
-          </div>
-          <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCtkgkflRq7vTB718fKCjxwL2--ml-hLfm0tv1V4PzCSYmlu_re6XthnZNa9Rmd5Cc6_eRZlU05OeDYHfbsNmvnUyVBGQZsFOrGHLtnCkIBZKEhaZfvTSms1jeDvPIllVAI8eKuyjG6vfDSZMkLrN4QP0ZMxETga0aZ3MOMpuZzH3nlpTljZFIppxIlp2tKLdUHePLtqd3cf88ePab68AIgYFFsr9nojKi5V65YmwLRPq5S1BAgSKvpOI92GCCZXEp4hFB7G2XLI4vo')"}}></div>
-        </section>
-
-        {/* Grid */}
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-surface-container-low p-4 rounded-2xl space-y-1 col-span-2 md:col-span-4 flex justify-between items-center">
-            <div>
-              <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest pt-1">Gold Stock (Vault)</p>
-              <p className="font-headline text-2xl text-primary font-bold">{currentStockGrams.toLocaleString()} g <span className="text-sm font-medium text-on-surface-variant ml-1">({(currentStockGrams/1000).toFixed(2)} kg)</span></p>
+        {/* Secondary KPIs */}
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="bg-[#1C1B1B] rounded-[24px] p-5 border border-outline/5 relative overflow-hidden">
+            <h3 className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-3">Prod. Hebdo</h3>
+            <p className="font-headline text-[22px] font-bold text-[#F2CA50] mb-3 tracking-tight">8,642.10 g</p>
+            <div className="h-1 bg-outline/10 rounded-full w-full overflow-hidden flex">
+              <div className="h-full bg-[#F2CA50] w-[65%]"></div>
             </div>
-            <Icon name="inventory_2" className="text-on-surface-variant/40 text-4xl" />
           </div>
-
-          <div className="bg-surface-container-low p-4 rounded-2xl">
-            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest pt-1">YTD Sales</p>
-            <p className="font-headline text-xl text-tertiary font-bold">${totalSalesRevenue > 1000000 ? (totalSalesRevenue/1000000).toFixed(2) + 'M' : (totalSalesRevenue/1000).toFixed(1) + 'K'}</p>
-          </div>
-          <div className="bg-surface-container-low p-4 rounded-2xl">
-            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest pt-1">Expenses</p>
-            <p className="font-headline text-xl text-error font-bold">${totalExpenses > 1000000 ? (totalExpenses/1000000).toFixed(2) + 'M' : (totalExpenses/1000).toFixed(1) + 'K'}</p>
-          </div>
-
-          <div className="bg-surface-container-low p-4 rounded-2xl border-l-4 border-error/50">
-            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest pt-1">Open Incidents</p>
-            <p className="font-headline text-2xl text-on-surface font-bold">{activeIncidents.length.toString().padStart(2, '0')}</p>
-          </div>
-          <div className="bg-surface-container-low p-4 rounded-2xl border-l-4 border-outline/30">
-            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest pt-1">Non-Op Equip.</p>
-            <p className="font-headline text-2xl text-on-surface font-bold">{nonOpEquip.toString().padStart(2, '0')}</p>
-          </div>
-        </section>
-
-        {/* Quick Actions */}
-        {role !== 'OBSERVER' && (
-          <section className="space-y-4">
-            <h2 className="font-headline text-sm font-bold uppercase tracking-widest text-on-surface-variant">Administrative Controls</h2>
-            <div className="grid grid-cols-4 md:flex md:flex-wrap gap-4 pb-2">
-              <Link to="/production" className="flex-1 min-w-[80px] bg-surface-container-highest p-4 rounded-2xl flex flex-col items-center gap-2 hover:bg-surface-bright transition-colors text-on-surface decoration-transparent">
-                <Icon name="add_circle" className="text-primary" />
-                <span className="text-[9px] md:text-[10px] font-bold uppercase text-center leading-tight">Add<br/>Yield</span>
-              </Link>
-              <Link to="/expenses" className="flex-1 min-w-[80px] bg-surface-container-highest p-4 rounded-2xl flex flex-col items-center gap-2 hover:bg-surface-bright transition-colors text-on-surface decoration-transparent">
-                <Icon name="payments" className="text-primary" />
-                <span className="text-[9px] md:text-[10px] font-bold uppercase text-center leading-tight">Add<br/>Expense</span>
-              </Link>
-              <Link to="/sales" className="flex-1 min-w-[80px] bg-surface-container-highest p-4 rounded-2xl flex flex-col items-center gap-2 hover:bg-surface-bright transition-colors text-on-surface decoration-transparent">
-                <Icon name="sell" className="text-primary" />
-                <span className="text-[9px] md:text-[10px] font-bold uppercase text-center leading-tight">Add<br/>Sale</span>
-              </Link>
-              <Link to="/incidents" className="flex-1 min-w-[80px] bg-surface-container-highest p-4 rounded-2xl flex flex-col items-center gap-2 hover:bg-surface-bright transition-colors text-on-surface decoration-transparent">
-                <Icon name="report_problem" className="text-error" />
-                <span className="text-[9px] md:text-[10px] font-bold uppercase text-center leading-tight">Report<br/>Issue</span>
-              </Link>
-              <Link to="/audit" className="flex-1 min-w-[80px] bg-surface-container-highest p-4 rounded-2xl flex flex-col items-center gap-2 hover:bg-surface-bright transition-colors text-on-surface decoration-transparent">
-                <Icon name="fact_check" className="text-tertiary" />
-                <span className="text-[9px] md:text-[10px] font-bold uppercase text-center leading-tight">Stock<br/>Audit</span>
-              </Link>
+          <div className="bg-[#1C1B1B] rounded-[24px] p-5 border border-outline/5 relative overflow-hidden">
+            <h3 className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-3">Prod. Mensuelle</h3>
+            <p className="font-headline text-[22px] font-bold text-[#F2CA50] mb-3 tracking-tight">34,120.00 g</p>
+            <div className="h-1 bg-outline/10 rounded-full w-full overflow-hidden flex">
+              <div className="h-full bg-[#F2CA50] w-[80%]"></div>
             </div>
-          </section>
-        )}
-
-        {/* Alerts */}
-        <section className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h2 className="font-headline text-sm font-bold uppercase tracking-widest text-on-surface-variant">Critical Alerts</h2>
-            <Link to="/incidents" className="text-[10px] font-bold text-primary uppercase cursor-pointer decoration-transparent">View All</Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {activeIncidents.slice(0, 3).map(inc => (
-              <Link to={`/incidents/${inc.id}`} key={inc.id} className={`bg-surface-container-low p-4 rounded-2xl flex gap-4 items-start border-l-4 cursor-pointer hover:bg-surface-container-highest transition-colors decoration-transparent text-on-surface ${inc.severity === 'CRITICAL' || inc.severity === 'HIGH' ? 'border-error' : inc.severity === 'MEDIUM' ? 'border-primary' : 'border-outline/30'}`}>
-                <Icon name={inc.severity === 'CRITICAL' || inc.severity === 'HIGH' ? 'warning' : 'build'} className={inc.severity === 'CRITICAL' || inc.severity === 'HIGH' ? 'text-error mt-0.5' : 'text-primary mt-0.5'} />
-                <div className="flex-1">
-                  <div className="flex justify-between">
-                    <h3 className="text-sm font-bold pt-1">{inc.id.toUpperCase()} Alert</h3>
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase mt-0.5 ${inc.severity === 'CRITICAL' || inc.severity === 'HIGH' ? 'bg-error/10 text-error' : 'bg-primary/10 text-primary'}`}>
-                      {inc.severity}
-                    </span>
-                  </div>
-                  <p className="text-xs text-on-surface-variant mt-1">{inc.description}</p>
-                </div>
-              </Link>
-            ))}
-            {activeIncidents.length === 0 && (
-              <div className="bg-surface-container-low p-4 rounded-2xl flex gap-4 items-center">
-                <Icon name="check_circle" className="text-primary" />
-                <span className="text-sm font-bold pt-1">All systems nominal</span>
+        </div>
+
+        {/* Third Row KPI */}
+        <div className="bg-[#1C1B1B] rounded-[24px] p-5 border border-outline/5 mb-4 flex justify-between items-center">
+          <div>
+            <h3 className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-2">Réserve d'Or (Chambre Forte)</h3>
+            <div className="flex items-baseline gap-2">
+              <span className="font-headline text-[22px] font-bold text-[#F2CA50] tracking-tight">42,850 g</span>
+              <span className="text-[11px] font-bold text-[#D0C5AF]/60">(42.85 kg)</span>
+            </div>
+          </div>
+          <div className="bg-[#242323] p-3 rounded-2xl border border-outline/5">
+            <Icon name="inventory_2" className="text-[#59481A] text-xl" />
+          </div>
+        </div>
+
+        {/* Financial KPIs */}
+        <div className="grid grid-cols-2 gap-4 mb-10">
+          <div className="bg-[#1C1B1B] rounded-[24px] p-5">
+            <h3 className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-1">Ventes Mensuelles</h3>
+            <p className="font-headline text-[28px] font-bold text-[#BFCDFF] tracking-tight">$1.42M</p>
+          </div>
+          <div className="bg-[#1C1B1B] rounded-[24px] p-5">
+            <h3 className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-1">Dépenses</h3>
+            <p className="font-headline text-[28px] font-bold text-[#FF8888] tracking-tight">$842K</p>
+          </div>
+        </div>
+
+        {/* Administrative Controls */}
+        <section className="mb-10">
+          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D0C5AF] mb-4">Contrôles Administratifs</h3>
+          <div className="grid grid-cols-3 gap-3">
+            <button className="bg-[#1C1B1B] hover:bg-[#2A2929] transition-colors rounded-[24px] p-5 flex flex-col items-center justify-center border border-outline/5 group">
+              <div className="bg-[#F2CA50]/10 p-2.5 rounded-full mb-3 group-hover:scale-110 transition-transform">
+                <Icon name="add_circle" className="text-[#F2CA50] text-lg" />
               </div>
-            )}
+              <span className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] text-center leading-relaxed">Ajouter<br/>Production</span>
+            </button>
+            <button className="bg-[#1C1B1B] hover:bg-[#2A2929] transition-colors rounded-[24px] p-5 flex flex-col items-center justify-center border border-outline/5 group">
+              <div className="bg-[#F2CA50]/10 p-2.5 rounded-full mb-3 group-hover:scale-110 transition-transform">
+                <Icon name="payments" className="text-[#F2CA50] text-lg" />
+              </div>
+              <span className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] text-center leading-relaxed">Ajouter<br/>Dépense</span>
+            </button>
+            <button className="bg-[#1C1B1B] hover:bg-[#2A2929] transition-colors rounded-[24px] p-5 flex flex-col items-center justify-center border border-outline/5 group">
+              <div className="bg-[#F2CA50]/10 p-2.5 rounded-full mb-3 group-hover:scale-110 transition-transform">
+                <Icon name="sell" className="text-[#F2CA50] text-lg" />
+              </div>
+              <span className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] text-center leading-relaxed">Ajouter<br/>Vente</span>
+            </button>
+          </div>
+        </section>
+
+        {/* Critical Alerts */}
+        <section className="mb-10">
+          <div className="flex justify-between items-end mb-4">
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D0C5AF]">Alertes Critiques</h3>
+            <Link to="/incidents" className="text-[9px] font-black uppercase tracking-widest text-[#F2CA50] hover:opacity-70 transition-opacity">
+              Voir Tout
+            </Link>
+          </div>
+          <div className="space-y-3">
+            <Link to="/incidents/INC-84" className="bg-[#1C1B1B] p-5 rounded-[24px] flex items-center justify-between group border-l-[3px] border-[#FF8888] hover:bg-[#2A2929] transition-all overflow-hidden relative">
+              <div className="absolute top-0 bottom-0 left-0 w-16 bg-gradient-to-r from-[#FF8888]/10 to-transparent pointer-events-none"></div>
+              <div className="flex items-start gap-4 z-10">
+                <Icon name="warning" className="text-[#FF8888] mt-0.5" />
+                <div className="flex flex-col">
+                  <span className="font-bold text-sm text-white mb-0.5">Incohérence des Stocks</span>
+                  <span className="text-[11px] text-[#D0C5AF]">Site Beta-02 : Écart de 12.4g.</span>
+                </div>
+              </div>
+              <div className="bg-[#FF8888]/10 px-2 py-1 rounded-[6px] border border-[#FF8888]/20 z-10">
+                <span className="text-[8px] font-black uppercase tracking-widest text-[#FF8888]">Haute</span>
+              </div>
+            </Link>
+            
+            <Link to="/incidents/INC-85" className="bg-[#1C1B1B] p-5 rounded-[24px] flex items-center justify-between group border-l-[3px] border-[#F2CA50] hover:bg-[#2A2929] transition-all overflow-hidden relative">
+              <div className="absolute top-0 bottom-0 left-0 w-16 bg-gradient-to-r from-[#F2CA50]/10 to-transparent pointer-events-none"></div>
+              <div className="flex items-start gap-4 z-10">
+                <Icon name="build" className="text-[#F2CA50] mt-0.5" />
+                <div className="flex flex-col">
+                  <span className="font-bold text-sm text-white mb-0.5">Panne Machine</span>
+                  <span className="text-[11px] text-[#D0C5AF]">Excavateur X74 : Panne hydraulique.</span>
+                </div>
+              </div>
+              <div className="bg-[#F2CA50]/10 px-2 py-1 rounded-[6px] border border-[#F2CA50]/20 z-10">
+                <span className="text-[8px] font-black uppercase tracking-widest text-[#F2CA50]">Moy.</span>
+              </div>
+            </Link>
+          </div>
+        </section>
+
+        {/* 7-Day Trend Chart */}
+        <section className="bg-[#1C1B1B] p-6 rounded-[32px] mb-8 border border-outline/5 relative overflow-hidden">
+          <div className="flex justify-between items-end mb-6">
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D0C5AF]">Tendance sur 7 Jours</h3>
+            <span className="text-[9px] text-[#D0C5AF] tracking-wider">18 Oct — 24 Oct 2023</span>
+          </div>
+          
+          <div className="flex border border-outline/10 rounded-[10px] bg-[#131313] p-1 mb-10">
+            <button className="flex-1 bg-[#F2CA50] text-[#131313] rounded-[6px] py-2 text-[8px] font-extrabold uppercase tracking-widest shadow-sm">Jour/Jour</button>
+            <button className="flex-1 text-[#D0C5AF] rounded-[6px] py-2 text-[8px] font-bold uppercase tracking-widest hover:text-white transition-colors">Moy. Semaine</button>
+            <button className="flex-1 text-[#D0C5AF] rounded-[6px] py-2 text-[8px] font-bold uppercase tracking-widest hover:text-white transition-colors">Moy. Mois</button>
+            <button className="flex-1 text-[#D0C5AF] rounded-[6px] py-2 text-[8px] font-bold uppercase tracking-widest hover:text-white transition-colors">Historique</button>
+          </div>
+
+          <div className="relative h-64 w-full flex items-end justify-between pt-8 pb-10">
+            {/* Chart Grid Lines */}
+            <div className="absolute inset-0 flex flex-col justify-between pt-8 pb-10 pointer-events-none">
+              <div className="w-full border-b border-outline/10 flex justify-end">
+                <span className="text-[7px] text-[#D0C5AF]/50 -mt-2 bg-[#1C1B1B] pl-2 -mr-1 rounded-bl">1.5kg</span>
+              </div>
+              <div className="w-full border-b border-dashed border-outline/10 flex justify-end"></div>
+              <div className="w-full border-b border-dashed border-outline/10 flex justify-end"></div>
+              <div className="w-full border-b border-outline/20"></div>
+            </div>
+
+            {/* Chart Bars */}
+            {[
+              { day: 'Mar 18', stat: '...', value: '840g', h: '56%', trend: 'none' },
+              { day: 'Mer 19', stat: '+9%', value: '920g', h: '61.3%', trend: 'up' },
+              { day: 'Jeu 20', stat: '-22%', value: '710g', h: '47.3%', trend: 'down' },
+              { day: 'Ven 21', stat: '+62%', value: '1150g', h: '76.6%', trend: 'up' },
+              { day: 'Sam 22', stat: '-11%', value: '1020g', h: '68%', trend: 'down' },
+              { day: 'Dim 23', stat: '+15%', value: '1180g', h: '78.6%', trend: 'up' },
+              { day: 'Lun 24', stat: '+6%', value: '1248g', h: '83.2%', active: true, trend: 'up' }
+            ].map((col, idx) => (
+              <div key={idx} className="relative flex flex-col items-center justify-end h-full w-[11%] group">
+                <span className={`absolute -top-5 text-[9px] font-bold transition-opacity ${col.active ? 'text-[#F2CA50]' : 'text-white/80 group-hover:opacity-100 opacity-60'}`}>
+                  {col.value}
+                </span>
+                
+                <div 
+                  className={`w-full rounded-sm transition-all duration-500 ease-out origin-bottom ${col.active ? 'bg-[#F2CA50] shadow-[0_0_15px_rgba(242,202,80,0.2)]' : 'bg-[#5B502C] hover:bg-[#685D36]'}`}
+                  style={{ height: col.h }}
+                ></div>
+
+                <div className="absolute -bottom-9 flex flex-col items-center whitespace-nowrap">
+                  <span className={`text-[8px] font-bold leading-tight ${col.active ? 'text-[#F2CA50]' : 'text-[#D0C5AF]'}`}>
+                    {col.day}
+                  </span>
+                  <span className={`text-[8px] font-bold mt-0.5 ${col.trend === 'up' ? 'text-white' : col.trend === 'down' ? 'text-[#FF8888]' : 'text-[#D0C5AF]'}`}>
+                    {col.stat}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
       </main>
-    </>
+    </div>
   );
 };
 

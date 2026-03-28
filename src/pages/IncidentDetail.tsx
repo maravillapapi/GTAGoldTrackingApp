@@ -14,8 +14,8 @@ const IncidentDetail: React.FC = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] text-on-surface-variant gap-4">
         <Icon name="error" className="text-4xl" />
-        <h2 className="font-headline font-bold">Incident Not Found</h2>
-        <button onClick={() => navigate('/incidents')} className="text-primary font-bold uppercase tracking-widest text-xs border border-primary/30 px-4 py-2 rounded-xl">Back to Logs</button>
+        <h2 className="font-headline font-bold">Incident Introuvable</h2>
+        <button onClick={() => navigate('/incidents')} className="text-primary font-bold uppercase tracking-widest text-xs border border-primary/30 px-4 py-2 rounded-xl">Retour aux Registres</button>
       </div>
     );
   }
@@ -37,7 +37,7 @@ const IncidentDetail: React.FC = () => {
         </div>
       </header>
 
-      <main className="px-6 mt-6 space-y-8 max-w-lg mx-auto md:max-w-xl pb-10">
+      <main className="px-6 mt-6 space-y-8 max-w-lg mx-auto md:max-w-xl pb-32">
         
         {/* Header Block */}
         <section className="bg-surface-container-low p-6 rounded-2xl relative overflow-hidden shadow-lg border-l-4" style={{ borderColor: isCritical ? 'var(--error)' : 'var(--primary)' }}>
@@ -46,31 +46,31 @@ const IncidentDetail: React.FC = () => {
           <div className="grid grid-cols-2 gap-4 border-b border-outline/10 pb-4 mb-4">
             <div>
               <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Site/Zone</p>
-              <p className="font-headline font-bold mt-1">Aurum-7 / Sector B</p>
+              <p className="font-headline font-bold mt-1">Aurum-7 / Secteur B</p>
             </div>
             <div>
-               <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Category</p>
-               <p className="font-headline font-bold mt-1">Equipment Failure</p>
+               <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Catégorie</p>
+               <p className="font-headline font-bold mt-1">Panne d'Équipement</p>
             </div>
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Operational Impact</h3>
+            <h3 className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Impact Opérationnel</h3>
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-surface-container-highest p-3 rounded-xl border border-outline/5 border-l-2 border-l-error">
-                <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">Production Loss</p>
+                <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">Perte de Production</p>
                 <p className="font-headline font-bold text-lg text-error">450 g</p>
               </div>
               <div className="bg-surface-container-highest p-3 rounded-xl border border-outline/5 border-l-2 border-l-error">
-                <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">Financial Impact</p>
+                <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">Impact Financier</p>
                 <p className="font-headline font-bold text-lg text-error">$12,400</p>
               </div>
               <div className="bg-surface-container-highest p-3 rounded-xl border border-outline/5">
-                <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">Duration</p>
+                <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">Durée</p>
                 <p className="font-headline font-bold text-sm">2h 15m</p>
               </div>
               <div className="bg-surface-container-highest p-3 rounded-xl border border-outline/5">
-                <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">Linked Asset</p>
+                <p className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest">Actif Lié</p>
                 <p className="font-headline font-bold text-[11px] truncate uppercase">{relatedEquipment ? relatedEquipment.name : 'N/A'}</p>
               </div>
             </div>
@@ -79,7 +79,7 @@ const IncidentDetail: React.FC = () => {
 
         {/* Narrative */}
         <section>
-          <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-on-surface-variant mb-4 pl-2">Incident Narrative</h3>
+          <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-on-surface-variant mb-4 pl-2">Récit de l'Incident</h3>
           <div className="bg-surface-container-low p-6 rounded-2xl border border-outline/10">
             <p className="text-sm text-on-surface leading-relaxed">{incident.description}</p>
             <div className="mt-4 pt-4 border-t border-outline/10 flex justify-between items-center text-xs text-on-surface-variant uppercase font-bold tracking-widest">
@@ -91,7 +91,7 @@ const IncidentDetail: React.FC = () => {
 
         {/* Oversight Timeline */}
         <section>
-          <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-on-surface-variant mb-4 pl-2">Oversight Timeline</h3>
+          <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-on-surface-variant mb-4 pl-2">Chronologie de Supervision</h3>
           
           <div className="bg-surface-container-low p-6 rounded-2xl border border-outline/10 space-y-6 relative before:absolute before:inset-0 before:ml-9 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-outline/20 before:to-transparent">
             
@@ -99,9 +99,9 @@ const IncidentDetail: React.FC = () => {
               <div className="flex items-center justify-center w-6 h-6 rounded-full border-4 border-surface-container-low bg-primary text-surface-container-low shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow whitespace-nowrap z-10"></div>
               <div className="w-[calc(100%-3rem)] md:w-[calc(50%-1.5rem)] bg-surface-container-highest p-4 rounded-xl border border-outline/5">
                 <div className="flex items-center justify-between space-x-2 mb-1">
-                  <div className="font-bold text-xs uppercase tracking-widest text-primary">Supervisor Note</div>
+                  <div className="font-bold text-xs uppercase tracking-widest text-primary">Note du Superviseur</div>
                 </div>
-                <div className="text-sm text-on-surface">"Initial assessment completed. Restart authorized pending manual reset."</div>
+                <div className="text-sm text-on-surface">"Évaluation initiale terminée. Redémarrage autorisé en attente d'une réinitialisation manuelle."</div>
                 <div className="text-[9px] uppercase tracking-widest mt-2 font-bold text-on-surface-variant flex items-center gap-1"><Icon name="person" className="text-[12px]" /> J. Miller</div>
               </div>
             </div>
@@ -110,9 +110,9 @@ const IncidentDetail: React.FC = () => {
               <div className="flex items-center justify-center w-6 h-6 rounded-full border-4 border-surface-container-low bg-surface-container-highest text-on-surface-variant shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow whitespace-nowrap z-10"></div>
               <div className="w-[calc(100%-3rem)] md:w-[calc(50%-1.5rem)] bg-surface-container-highest p-4 rounded-xl border border-outline/5">
                 <div className="flex items-center justify-between mb-1">
-                  <div className="font-bold text-xs uppercase tracking-widest text-on-surface-variant">Status Change</div>
+                  <div className="font-bold text-xs uppercase tracking-widest text-on-surface-variant">Changement de Statut</div>
                 </div>
-                <div className="text-sm text-on-surface">Moved from Reported to Under Review</div>
+                <div className="text-sm text-on-surface">Passé de Signalé à En Revue</div>
               </div>
             </div>
 
@@ -120,9 +120,9 @@ const IncidentDetail: React.FC = () => {
               <div className="flex items-center justify-center w-6 h-6 rounded-full border-4 border-surface-container-low bg-error text-error shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow whitespace-nowrap z-10"></div>
               <div className="w-[calc(100%-3rem)] md:w-[calc(50%-1.5rem)] bg-error/10 p-4 rounded-xl border border-error/20">
                 <div className="flex items-center justify-between mb-1">
-                  <div className="font-bold text-xs uppercase tracking-widest text-error">Log Entry Created</div>
+                  <div className="font-bold text-xs uppercase tracking-widest text-error">Entrée de Registre Créée</div>
                 </div>
-                <div className="text-sm text-on-surface">Automated system alert triggered. Dispatching supervisor.</div>
+                <div className="text-sm text-on-surface">Alerte système automatisée déclenchée. Superviseur en route.</div>
               </div>
             </div>
 

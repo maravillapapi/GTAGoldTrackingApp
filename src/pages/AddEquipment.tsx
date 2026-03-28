@@ -1,112 +1,199 @@
-import React, { useState } from 'react';
-import { useAppContext } from '../contexts/AppContext';
+import React from 'react';
 import { Icon } from '../components/Icon';
 import { useNavigate } from 'react-router-dom';
+import heroImg from '../assets/hero.png';
 
 const AddEquipment: React.FC = () => {
-  const { role } = useAppContext();
-  // We simulate the context action for adding equipment if it's not wired up yet
   const navigate = useNavigate();
-  const [name, setName] = useState('');
-  const [type, setType] = useState('Heavy Machinery');
-  const [costPerHour, setCostPerHour] = useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || role === 'OBSERVER') return;
-    
-    // Simulate add functionality
-    navigate('/inventory');
-  };
 
   return (
-    <>
-      <header className="bg-[#131313] text-on-surface font-headline font-bold uppercase sticky top-0 z-40 bg-opacity-90 backdrop-blur-md border-b border-outline/10">
-        <div className="flex justify-between items-center w-full px-6 py-4">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate(-1)} className="text-on-surface-variant hover:text-on-surface transition-colors pb-1">
-              <Icon name="arrow_back_ios_new" />
-            </button>
-            <h1 className="text-xl tracking-tight">Register Asset</h1>
-          </div>
-          <Icon name="precision_manufacturing" className="text-primary" />
+    <div className="bg-[#131313] min-h-screen text-[#E5E2E1] font-body selection:bg-primary/30 pb-32">
+      
+      {/* Top Header */}
+      <header className="flex justify-between items-center px-6 py-6 border-b border-outline/5">
+        <div className="flex items-center gap-4">
+          <button onClick={() => navigate(-1)} className="text-[#F2CA50] hover:text-white transition-colors">
+            <Icon name="arrow_back" />
+          </button>
+          <h1 className="font-headline font-bold text-sm tracking-[0.2em] text-white uppercase">Ajouter Matériel</h1>
         </div>
+        <span className="font-headline font-bold text-sm tracking-[0.2em] text-[#F2CA50] uppercase">Sovereign</span>
       </header>
 
-      <main className="px-6 mt-6 space-y-8 max-w-lg mx-auto md:max-w-xl">
-        {role !== 'OBSERVER' ? (
-          <section className="bg-surface-container-low p-6 rounded-2xl shadow-lg border border-outline-variant/20">
-            <h2 className="font-headline text-lg font-bold uppercase tracking-widest text-on-surface mb-6">Asset Specification</h2>
+      <main className="px-6 mt-6 max-w-lg mx-auto md:max-w-2xl">
+        
+        {/* Banner */}
+        <div className="w-full h-[140px] rounded-2xl overflow-hidden mb-8 relative border border-outline/5 bg-[#1C1B1B]">
+          <img src={heroImg} alt="Hardware" className="w-full h-full object-cover object-top opacity-30 mix-blend-luminosity" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#131313] via-transparent to-transparent"></div>
+        </div>
+
+        <form className="space-y-10">
+          
+          {/* Identity Group */}
+          <section>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-1 h-4 bg-[#F2CA50] rounded-full"></div>
+              <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D0C5AF]">Identification</h2>
+            </div>
             
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              <div className="flex flex-col gap-1">
-                <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest pt-1">Equipment / Model Name</label>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-2">Nom de l'Équipement</label>
                 <input 
                   type="text" 
-                  className="bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-sm font-headline font-bold focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full transition-colors"
-                  placeholder="e.g. Excavator Alpha-1" 
-                  value={name} 
-                  onChange={e => setName(e.target.value)} 
-                  required 
+                  placeholder="ex. Concasseur Primaire A1" 
+                  className="w-full bg-[#242323] border border-outline/10 rounded-[12px] px-4 py-3.5 text-sm text-white focus:outline-none focus:border-[#F2CA50]/50 placeholder:text-[#E5E2E1]/30 transition-colors"
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
-                <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest pt-1">Classification Type</label>
-                <select 
-                  className="bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-sm font-headline font-bold focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full transition-colors"
-                  value={type} 
-                  onChange={e => setType(e.target.value)}
-                >
-                  <option value="Heavy Machinery">Heavy Machinery</option>
-                  <option value="Processing">Processing</option>
-                  <option value="Transport">Transport</option>
-                  <option value="Auxiliary">Auxiliary / Power</option>
-                </select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col gap-1">
-                  <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest pt-1">OpEx Rate ($/h)</label>
-                  <input 
-                    type="number" 
-                    step="0.1"
-                    className="bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-sm font-headline font-bold focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full transition-colors"
-                    placeholder="e.g. 50" 
-                    value={costPerHour} 
-                    onChange={e => setCostPerHour(e.target.value)} 
-                    required 
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest pt-1">Condition</label>
-                  <select 
-                    className="bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-sm font-headline font-bold focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full transition-colors"
-                    disabled
-                  >
-                    <option>100% (NEW)</option>
+              <div>
+                <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-2">Catégorie</label>
+                <div className="relative">
+                  <select className="w-full appearance-none bg-[#242323] border border-outline/10 text-[#E5E2E1] rounded-[12px] px-4 py-3.5 text-sm focus:outline-none focus:border-[#F2CA50]/50 transition-colors">
+                    <option>Excavateurs</option>
+                    <option>Chargeuses</option>
+                    <option>Foreuses</option>
                   </select>
+                  <Icon name="expand_more" className="absolute right-4 top-1/2 -translate-y-1/2 text-[#F2CA50] pointer-events-none" />
                 </div>
               </div>
 
-              <button 
-                type="submit" 
-                disabled={!name}
-                className={`mt-4 p-4 rounded-xl flex items-center justify-center gap-2 font-headline uppercase font-bold text-xs tracking-widest transition-opacity ${name ? 'bg-primary text-on-primary shadow-[0_5px_15px_rgba(242,202,80,0.2)]' : 'bg-surface-container-highest opacity-50 text-on-surface-variant cursor-not-allowed'}`}
-              >
-                <Icon name="add" className={name ? "" : ""} />
-                Initialize Asset
-              </button>
-            </form>
+              <div>
+                <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-2">Référence / ID</label>
+                <input 
+                  type="text" 
+                  placeholder="MNE-4402-B" 
+                  className="w-full bg-[#242323] border border-outline/10 rounded-[12px] px-4 py-3.5 text-sm text-white focus:outline-none focus:border-[#F2CA50]/50 placeholder:text-[#E5E2E1]/30 transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-2">Marque / Modèle</label>
+                <input 
+                  type="text" 
+                  placeholder="Caterpillar 797F" 
+                  className="w-full bg-[#242323] border border-outline/10 rounded-[12px] px-4 py-3.5 text-sm text-white focus:outline-none focus:border-[#F2CA50]/50 placeholder:text-[#E5E2E1]/30 transition-colors"
+                />
+              </div>
+            </div>
           </section>
-        ) : (
-           <div className="bg-surface-container-low p-6 rounded-2xl flex flex-col items-center justify-center gap-3 text-on-surface-variant">
-              <Icon name="visibility" className="text-3xl text-primary opacity-50" />
-              <span className="text-xs font-bold uppercase tracking-widest text-center">Observer Cannot Add Equipment</span>
-           </div>
-        )}
+
+          {/* Location Group */}
+          <section>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-1 h-4 bg-[#F2CA50] rounded-full"></div>
+              <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D0C5AF]">Localisation</h2>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-2">Site</label>
+                <div className="relative">
+                  <select className="w-full appearance-none bg-[#242323] border border-outline/10 text-[#E5E2E1] rounded-[12px] px-4 py-3.5 text-sm focus:outline-none focus:border-[#F2CA50]/50 transition-colors">
+                    <option>Eagle Ridge</option>
+                    <option>Fosse Nord</option>
+                  </select>
+                  <Icon name="location_on" className="absolute right-4 top-1/2 -translate-y-1/2 text-[#F2CA50] text-[18px] pointer-events-none" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-2">Zone</label>
+                <div className="relative">
+                  <select className="w-full appearance-none bg-[#242323] border border-outline/10 text-[#E5E2E1] rounded-[12px] px-4 py-3.5 text-sm focus:outline-none focus:border-[#F2CA50]/50 transition-colors">
+                    <option>Secteur 4G</option>
+                    <option>Secteur 5A</option>
+                  </select>
+                  <Icon name="layers" className="absolute right-4 top-1/2 -translate-y-1/2 text-[#F2CA50] text-[18px] pointer-events-none" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Details Group */}
+          <section>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-1 h-4 bg-[#F2CA50] rounded-full"></div>
+              <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D0C5AF]">Détails</h2>
+            </div>
+            
+            <div className="space-y-6">
+              <div>
+                <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-2">Date d'Acquisition</label>
+                <input 
+                  type="date" 
+                  className="w-full bg-[#242323] border border-outline/10 rounded-[12px] px-4 py-3.5 text-sm text-[#E5E2E1] focus:outline-none focus:border-[#F2CA50]/50 transition-colors"
+                />
+              </div>
+
+              {/* Physical State Pills */}
+              <div>
+                <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-3">État Physique</label>
+                <div className="flex bg-[#242323] rounded-[12px] border border-outline/5 overflow-hidden">
+                  <button type="button" className="flex-1 py-3 text-[9px] font-bold uppercase tracking-widest text-[#F2CA50] border border-[#F2CA50]/40 bg-[#F2CA50]/5 rounded-[12px]">Neuf</button>
+                  <button type="button" className="flex-1 py-3 text-[9px] font-bold uppercase tracking-widest text-[#D0C5AF] hover:bg-white/5 transition-colors">Bon</button>
+                  <button type="button" className="flex-1 py-3 text-[9px] font-bold uppercase tracking-widest text-[#D0C5AF] hover:bg-white/5 transition-colors">Moyen</button>
+                  <button type="button" className="flex-1 py-3 text-[9px] font-bold uppercase tracking-widest text-[#D0C5AF] hover:bg-white/5 transition-colors">Défect.</button>
+                </div>
+              </div>
+
+              {/* Operational Status Toggle */}
+              <div>
+                <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-3">Statut Opérationnel</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button type="button" className="flex items-center justify-between p-4 bg-[#242323] border border-[#BFCDFF]/40 bg-[#BFCDFF]/5 rounded-[12px]">
+                    <div className="flex flex-col items-start gap-0.5">
+                      <span className="text-[8px] font-extrabold uppercase tracking-widest text-[#BFCDFF]">Fonctionnel</span>
+                      <span className="text-[10px] text-[#E5E2E1] opacity-70">Prêt à l'emploi</span>
+                    </div>
+                    <div className="w-5 h-5 rounded-full bg-[#BFCDFF] flex items-center justify-center">
+                      <Icon name="check" className="text-[#131313] text-[12px] font-bold" />
+                    </div>
+                  </button>
+                  <button type="button" className="flex items-center justify-between p-4 bg-[#1C1B1B] border border-outline/10 rounded-[12px] hover:bg-[#242323] transition-colors">
+                    <div className="flex flex-col items-start gap-0.5">
+                      <span className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF]">En Panne</span>
+                      <span className="text-[10px] text-[#D0C5AF] opacity-50">Réparation</span>
+                    </div>
+                    <Icon name="error" className="text-[#D0C5AF]/30 text-xl" />
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          {/* Observations Group */}
+          <section>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-1 h-4 bg-[#F2CA50] rounded-full"></div>
+              <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D0C5AF]">Observations</h2>
+            </div>
+            
+            <div>
+              <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-2">Commentaire / Note</label>
+              <textarea 
+                rows={4}
+                placeholder="Entrez des notes spécifiques ou limites opérationnelles..."
+                className="w-full bg-[#242323] border border-outline/10 rounded-[12px] px-4 py-4 text-sm text-white focus:outline-none focus:border-[#F2CA50]/50 placeholder:text-[#D0C5AF]/30 transition-colors resize-none"
+              ></textarea>
+            </div>
+          </section>
+
+          {/* Bottom Actions */}
+          <div className="pt-4 pb-10 space-y-4">
+            <button type="button" className="w-full bg-gradient-to-br from-[#F2CA50] to-[#D4AF37] text-[#131313] rounded-full py-4 flex items-center justify-center gap-3 hover:opacity-90 transition-opacity shadow-[0_4px_20px_rgba(242,202,80,0.3)]">
+              <Icon name="save" className="text-xl" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em]">Enregistrer Matériel</span>
+            </button>
+            <button type="button" onClick={() => navigate(-1)} className="w-full bg-transparent border border-outline/10 text-white rounded-full py-4 flex items-center justify-center hover:bg-white/5 transition-colors">
+              <span className="text-[10px] font-extrabold uppercase tracking-[0.2em]">Annuler</span>
+            </button>
+          </div>
+
+        </form>
       </main>
-    </>
+    </div>
   );
 };
 
