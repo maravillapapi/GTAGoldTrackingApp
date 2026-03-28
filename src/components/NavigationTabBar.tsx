@@ -4,11 +4,11 @@ import { Icon } from './Icon';
 
 const NavigationTabBar: React.FC = () => {
   return (
-    <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#0E0E0E] rounded-t-[24px] shadow-[0_-4px_40px_rgba(0,0,0,0.4)] border-t border-outline-variant/10">
+    <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-background/95 backdrop-blur-lg rounded-t-[28px] shadow-[0_-8px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_-8px_40px_rgba(0,0,0,0.4)] border-t border-outline-variant/10">
       <NavLink 
         to="/" 
         end 
-        className={({ isActive }) => `flex flex-col items-center justify-center transition-all ${isActive ? 'text-primary bg-surface-container-low rounded-xl px-4 py-2' : 'text-on-surface-variant opacity-60 hover:text-primary'} `}
+        className={({ isActive }) => `flex flex-col items-center justify-center transition-all ${isActive ? 'text-primary bg-primary/10 rounded-xl px-4 py-2' : 'text-on-surface-variant opacity-60 hover:text-primary'} `}
       >
         {({ isActive }) => (
           <>

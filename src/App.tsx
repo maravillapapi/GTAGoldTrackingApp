@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AppProvider } from './contexts/AppContext';
 
 import NavigationTabBar from './components/NavigationTabBar';
@@ -26,6 +26,12 @@ import GoldStock from './pages/GoldStock';
 import Settings from './pages/Settings';
 import MenuBurger from './components/MenuBurger';
 
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+};
+
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="max-w-7xl mx-auto bg-background min-h-[100dvh] relative pb-32 md:pb-0 md:pl-28 md:pt-4">
@@ -40,6 +46,7 @@ const App: React.FC = () => {
   return (
     <AppProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />

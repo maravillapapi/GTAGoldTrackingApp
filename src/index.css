@@ -42,8 +42,8 @@
     --color-surface-container-highest: #404854;
     --color-on-surface: #EAECEF;
     --color-on-surface-variant: #848E9C;
-    --color-outline: #474D57;
-    --color-outline-variant: #2B3139;
+    --color-outline: #2B3139;
+    --color-outline-variant: #1E2026;
     --color-primary: #F2CA50;
     --color-on-primary: #1A1200;
     --color-primary-container: #D4AF37;
@@ -93,9 +93,13 @@
     background: linear-gradient(135deg, #C8960C 0%, #9A6F00 100%);
   }
 
-  /* Dark mode: warm classic brass */
+  /* Dark mode: warm classic brass + text uses dark background for max contrast */
   .dark .metallic-gradient {
     background: linear-gradient(135deg, #f2ca50 0%, #d4af37 100%);
+    color: var(--color-background) !important;
+  }
+  .dark .metallic-gradient * {
+    color: var(--color-background) !important;
   }
   
   .glass-card {

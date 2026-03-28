@@ -35,15 +35,26 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [role, setRole] = useState<Role>('ADMIN'); // Default to Admin for testing
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('sv-theme');
+    const prefersDark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    // Apply immediately so there's no flash
+    document.documentElement.classList.toggle('dark', prefersDark);
+    return prefersDark;
+  });
 
   const toggleDark = () => {
     setIsDark(prev => {
       const next = !prev;
-      document.documentElement.classList.toggle('dark', next);
+      localStorage.setItem('sv-theme', next ? 'dark' : 'light');
       return next;
     });
   };
+
+  // Sync with DOM
+  React.useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDark);
+  }, [isDark]);
   
   const [equipment] = useState<Equipment[]>(initialEquipment);
   const [production, setProduction] = useState<ProductionLog[]>(initialProduction);

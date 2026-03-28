@@ -5,48 +5,41 @@ import { useAppContext } from '../contexts/AppContext';
 
 type ChartTab = 'day' | 'week' | 'month' | 'global';
 
-const CHART_DATASETS: Record<ChartTab, { day: string; g: number; change: string; isOff: boolean; hasAlert: boolean; isToday: boolean }[]> = {
-  day: [
-    { day: 'Mar 18', g: 840,  change: '---',  isOff: false, hasAlert: false, isToday: false },
-    { day: 'Mer 19', g: 920,  change: '+9%',  isOff: false, hasAlert: false, isToday: false },
-    { day: 'Jeu 20', g: 710,  change: '-22%', isOff: false, hasAlert: false, isToday: false },
-    { day: 'Ven 21', g: 1150, change: '+62%', isOff: false, hasAlert: false, isToday: false },
-    { day: 'Sam 22', g: 0,    change: 'Off',  isOff: true,  hasAlert: false, isToday: false },
-    { day: 'Dim 23', g: 1180, change: '+15%', isOff: false, hasAlert: true,  isToday: false },
-    { day: 'Lun 24', g: 1248, change: '+6%',  isOff: false, hasAlert: false, isToday: true  },
-  ],
-  week: [
-    { day: 'S.38', g: 1020, change: '---',  isOff: false, hasAlert: false, isToday: false },
-    { day: 'S.39', g: 980,  change: '-4%',  isOff: false, hasAlert: false, isToday: false },
-    { day: 'S.40', g: 1100, change: '+12%', isOff: false, hasAlert: false, isToday: false },
-    { day: 'S.41', g: 870,  change: '-21%', isOff: false, hasAlert: true,  isToday: false },
-    { day: 'S.42', g: 1050, change: '+21%', isOff: false, hasAlert: false, isToday: false },
-    { day: 'S.43', g: 1180, change: '+12%', isOff: false, hasAlert: false, isToday: false },
-    { day: 'S.44', g: 1120, change: '-5%',  isOff: false, hasAlert: false, isToday: true  },
-  ],
-  month: [
-    { day: 'Avr',  g: 890,  change: '---',  isOff: false, hasAlert: false, isToday: false },
-    { day: 'Mai',  g: 1020, change: '+15%', isOff: false, hasAlert: false, isToday: false },
-    { day: 'Juin', g: 1150, change: '+13%', isOff: false, hasAlert: false, isToday: false },
-    { day: 'Juil', g: 980,  change: '-15%', isOff: false, hasAlert: true,  isToday: false },
-    { day: 'Aou',  g: 1080, change: '+10%', isOff: false, hasAlert: false, isToday: false },
-    { day: 'Sep',  g: 1200, change: '+11%', isOff: false, hasAlert: false, isToday: false },
-    { day: 'Oct',  g: 1120, change: '-7%',  isOff: false, hasAlert: false, isToday: true  },
-  ],
-  global: [
-    { day: '2020', g: 720,  change: '---',  isOff: false, hasAlert: false, isToday: false },
-    { day: '2021', g: 890,  change: '+24%', isOff: false, hasAlert: false, isToday: false },
-    { day: '2022', g: 1050, change: '+18%', isOff: false, hasAlert: false, isToday: false },
-    { day: '2023', g: 1120, change: '+7%',  isOff: false, hasAlert: false, isToday: true  },
-    { day: 'Obj.',  g: 1300, change: 'Cible', isOff: false, hasAlert: false, isToday: false },
-    { day: '',      g: 0,   change: '',     isOff: true,  hasAlert: false, isToday: false },
-    { day: '',      g: 0,   change: '',     isOff: true,  hasAlert: false, isToday: false },
-  ],
-};
+// 7-day bars NEVER change — only the % comparison mode changes per tab
+const DAY_DATA = [
+  { day: 'Mar 18', g: 840,  hasAlert: false, isToday: false, isOff: false },
+  { day: 'Mer 19', g: 920,  hasAlert: false, isToday: false, isOff: false },
+  { day: 'Jeu 20', g: 710,  hasAlert: false, isToday: false, isOff: false },
+  { day: 'Ven 21', g: 1150, hasAlert: false, isToday: false, isOff: false },
+  { day: 'Sam 22', g: 0,    hasAlert: false, isToday: false, isOff: true  },
+  { day: 'Dim 23', g: 1180, hasAlert: true,  isToday: false, isOff: false },
+  { day: 'Lun 24', g: 1248, hasAlert: false, isToday: true,  isOff: false },
+];
+const WEEKLY_AVG  = 1000;
+const MONTHLY_AVG = 1080;
+const GLOBAL_REF  = 920;
+const CHART_H = 160;
+const MAX_G   = 1500;
+
+function getChange(tab: ChartTab, idx: number): string {
+  const d = DAY_DATA[idx];
+  if (d.isOff) return 'Off';
+  let ref: number;
+  if (tab === 'day') {
+    let prev = idx - 1;
+    while (prev >= 0 && (DAY_DATA[prev].isOff || DAY_DATA[prev].g === 0)) prev--;
+    if (prev < 0) return '—';
+    ref = DAY_DATA[prev].g;
+  } else if (tab === 'week')  { ref = WEEKLY_AVG; }
+    else if (tab === 'month') { ref = MONTHLY_AVG; }
+    else                      { ref = GLOBAL_REF; }
+  const pct = ((d.g - ref) / ref) * 100;
+  return (pct >= 0 ? '+' : '') + pct.toFixed(0) + '%';
+}
 
 const TAB_LABELS: Record<ChartTab, string> = {
-  day: 'Jour vs J-1',
-  week: 'Moy. Semaine',
+  day:   'Jour vs J-1',
+  week:  'Moy. Semaine',
   month: 'Moy. Mensuelle',
   global: 'Global',
 };
@@ -246,74 +239,82 @@ const Home: React.FC = () => {
             ))}
           </div>
 
-          {/* Chart area */}
-          {(() => {
-            const data = CHART_DATASETS[chartTab];
-            const maxG = Math.max(...data.map(d => d.g), 1500);
-            return (
-              <div className="w-full">
-                {/* Y-axis grid + bars */}
-                <div className="relative" style={{ height: '180px' }}>
-                  {/* Grid lines */}
-                  {[1500, 1000, 500, 0].map((val) => (
-                    <div
-                      key={val}
-                      className="absolute left-0 right-0 flex items-center pointer-events-none"
-                      style={{ bottom: `${(val / maxG) * 100}%` }}
-                    >
-                      <div className="w-full border-t border-outline-variant/15" />
-                      <span className="text-[8px] text-on-surface-variant/40 pl-1 whitespace-nowrap">{val === 0 ? '0' : `${val/1000} kg`}</span>
+          {/* Chart area — bars use pixel heights for reliable rendering */}
+          <div className="w-full">
+            {/* Chart: grid lines + bars together */}
+            <div className="relative" style={{ height: `${CHART_H}px` }}>
+              {/* Horizontal grid lines */}
+              {[MAX_G, MAX_G * 0.67, MAX_G * 0.33, 0].map((val) => (
+                <div
+                  key={val}
+                  className="absolute left-0 right-0 flex items-center pointer-events-none"
+                  style={{ bottom: `${(val / MAX_G) * CHART_H}px` }}
+                >
+                  <div className="flex-1 border-t border-outline-variant/20" />
+                  <span className="text-[7px] text-on-surface-variant/40 pl-1 whitespace-nowrap">
+                    {val === 0 ? '0' : `${(val / 1000).toFixed(1)} kg`}
+                  </span>
+                </div>
+              ))}
+
+              {/* Bars row — each column is a portion of the chart width */}
+              <div className="absolute inset-0 flex items-end gap-1">
+                {DAY_DATA.map((d) => {
+                  const barH = d.isOff ? 0 : Math.max((d.g / MAX_G) * CHART_H, 3);
+                  return (
+                    <div key={d.day} className="flex-1 flex flex-col items-center" style={{ height: `${CHART_H}px` }}>
+                      {/* spacer pushes bar to bottom */}
+                      <div className="flex-1" />
+                      {/* Alert */}
+                      {d.hasAlert && (
+                        <span style={{ fontFamily: 'Material Symbols Outlined', fontSize: '13px', color: 'var(--color-error)', lineHeight: 1 }}>report</span>
+                      )}
+                      {/* Value */}
+                      {!d.isOff && d.g > 0 && (
+                        <span className={`text-[8px] font-bold leading-tight mb-0.5 ${d.isToday ? 'text-primary' : 'text-on-surface-variant'}`}>
+                          {d.g}g
+                        </span>
+                      )}
+                      {d.isOff && <span className="text-[7px] text-on-surface-variant/40 mb-0.5">0g</span>}
+                      {/* Bar */}
+                      {d.isOff ? (
+                        <div className="w-full" style={{ height: '2px', background: 'var(--color-error)', opacity: 0.25 }} />
+                      ) : (
+                        <div
+                          className={`w-full max-w-[18px] min-w-[10px] rounded-t-[3px] transition-all duration-300 ${d.isToday ? 'bg-primary' : 'bg-on-surface-variant/20 border border-on-surface-variant/10'}`}
+                          style={{
+                            height: `${barH}px`,
+                            boxShadow: d.isToday ? '0 0 14px rgba(242,202,80,0.35)' : 'none',
+                          }}
+                        />
+                      )}
                     </div>
-                  ))}
-
-                  {/* Bars */}
-                  <div className="absolute inset-0 flex items-end gap-1 pb-0">
-                    {data.map((d) => {
-                      const pct = (d.g / maxG) * 100;
-                      return (
-                        <div key={d.day} className="flex-1 flex flex-col items-center justify-end h-full">
-                          {/* Alert icon */}
-                          {d.hasAlert && (
-                            <div className="mb-1 text-error text-[10px]">
-                              <span style={{fontFamily:'Material Symbols Outlined', fontSize:'14px', color:'var(--color-error)'}}>report</span>
-                            </div>
-                          )}
-                          {/* Value label */}
-                          {!d.isOff && d.g > 0 && (
-                            <span className={`text-[8px] font-bold mb-1 ${d.isToday ? 'text-primary' : 'text-on-surface-variant'}`}>{d.g} g</span>
-                          )}
-                          {d.isOff && <span className="text-[8px] font-bold mb-1 text-on-surface-variant/50">0 g</span>}
-                          {/* Bar */}
-                          {d.isOff ? (
-                            <div className="w-full" style={{ height: '2px', background: 'var(--color-error)', opacity: 0.3 }} />
-                          ) : (
-                            <div
-                              className={`w-full rounded-t-sm transition-all ${d.isToday ? 'bg-primary shadow-[0_0_12px_rgba(242,202,80,0.3)]' : 'bg-primary/30'}`}
-                              style={{ height: `${Math.max(pct, 2)}%` }}
-                            />
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* X-axis labels */}
-                <div className="flex gap-1 mt-3">
-                  {data.map((d) => {
-                    const changeNeg = d.change.startsWith('-');
-                    const changePos = d.change.startsWith('+');
-                    return (
-                      <div key={`lbl-${d.day}`} className="flex-1 flex flex-col items-center gap-0.5">
-                        <span className={`text-[8px] font-bold uppercase whitespace-nowrap ${d.isToday ? 'text-primary' : 'text-on-surface-variant'}`}>{d.day}</span>
-                        <span className={`text-[7px] font-bold ${changeNeg ? 'text-error' : changePos ? 'text-primary' : 'text-on-surface-variant/50'}`}>{d.change}</span>
-                      </div>
-                    );
-                  })}
-                </div>
+                  );
+                })}
               </div>
-            );
-          })()}
+            </div>
+
+            {/* X-axis labels */}
+            <div className="flex gap-1 mt-2">
+              {DAY_DATA.map((d, idx) => {
+                const change = getChange(chartTab, idx);
+                const isNeg = change.startsWith('-');
+                const isPos = change.startsWith('+');
+                return (
+                  <div key={`x-${d.day}`} className="flex-1 flex flex-col items-center gap-0.5">
+                    <span className={`text-[7px] font-bold uppercase whitespace-nowrap ${d.isToday ? 'text-primary' : 'text-on-surface-variant'}`}>
+                      {d.day}
+                    </span>
+                    <span className={`text-[7px] font-semibold ${
+                      d.isOff ? 'text-on-surface-variant/40' : isNeg ? 'text-error' : isPos ? 'text-primary' : 'text-on-surface-variant/50'
+                    }`}>
+                      {change}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
           <div className="flex justify-center pt-2">
             <div className="bg-surface-container px-5 py-2.5 rounded-full border border-outline-variant/10">
