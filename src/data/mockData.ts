@@ -38,14 +38,20 @@ export interface Incident {
   impactGrams?: number;
 }
 
+export type ExpenseStatus = 'VERIFIED' | 'PENDING';
+
 export interface Expense {
   id: string;
   date: string;
   amount: number;
-  category: string;
+  category: 'FUEL' | 'MAINTENANCE' | 'LABOR' | 'PARTS' | 'OTHER';
+  vendor?: string;
+  txnNumber?: string;
   description?: string;
   receiptImageUrl?: string;
   equipmentId?: string;
+  equipmentLabel?: string;
+  status: ExpenseStatus;
 }
 
 export type SaleStatus = 'PENDING' | 'COMPLETED' | 'CANCELLED';
@@ -142,15 +148,42 @@ export const initialSales: Sale[] = [
 export const initialExpenses: Expense[] = [
   {
     id: 'exp-1',
-    date: '2026-03-25',
-    amount: 3200,
-    category: 'Fuel',
+    date: '2026-10-24',
+    amount: 1250,
+    category: 'PARTS',
+    vendor: 'Global Mining Parts Ltd.',
+    txnNumber: 'TXN-90214',
+    equipmentId: 'eq-1',
+    equipmentLabel: 'Excavatrice EX-42',
+    status: 'VERIFIED',
   },
   {
     id: 'exp-2',
-    date: '2026-03-26',
-    amount: 1500,
-    category: 'Parts',
-    equipmentId: 'eq-2',
-  }
+    date: '2026-10-22',
+    amount: 24500,
+    category: 'FUEL',
+    vendor: 'Apex Fuel Logistics',
+    txnNumber: 'TXN-88431',
+    equipmentId: 'eq-3',
+    equipmentLabel: 'Camion TRK-08',
+    status: 'VERIFIED',
+  },
+  {
+    id: 'exp-3',
+    date: '2026-10-20',
+    amount: 5800,
+    category: 'MAINTENANCE',
+    vendor: 'Technic Maintenance',
+    txnNumber: 'TXN-77312',
+    status: 'PENDING',
+  },
+  {
+    id: 'exp-4',
+    date: '2026-10-18',
+    amount: 3200,
+    category: 'LABOR',
+    vendor: 'Équipe Externe Solutions',
+    txnNumber: 'TXN-72100',
+    status: 'VERIFIED',
+  },
 ];

@@ -1,23 +1,37 @@
 import React from 'react';
 import { Icon } from '../components/Icon';
-import { useNavigate } from 'react-router-dom';
-import heroImg from '../assets/hero.png'; // Using the standard hero image available
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppContext } from '../contexts/AppContext';
+import heroImg from '../assets/hero.png';
 
 const EquipmentDetail: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const { equipment } = useAppContext();
+
+  const eq = equipment.find(e => e.id === id) || equipment[0];
+  if (!eq) return <div className="p-8 text-center text-error pt-20">Équipement introuvable.</div>;
+
+  const displayName = eq.name;
+  const displayId = eq.id.toUpperCase();
+  const statusColor = eq.operationalStatus === 'FUNCTIONAL' ? '#BFCDFF' : '#F6495D';
+  const statusLabel = eq.operationalStatus === 'FUNCTIONAL' ? 'Fonctionnel' : 'En Maintenance';
+  const conditionLabel = eq.condition > 0.7 ? 'Bon' : eq.condition > 0.4 ? 'Moyen' : 'Dégradé';
 
   return (
     <div className="bg-background min-h-screen text-on-surface font-body selection:bg-primary/30 pb-32">
       
-      {/* Top App Bar - Overlaid on Image */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-6 py-4 bg-gradient-to-b from-black/80 to-transparent md:pl-32">
-        <button onClick={() => navigate(-1)} className="text-primary hover:text-on-surface transition-colors">
-          <Icon name="arrow_back" className="text-2xl" />
-        </button>
-        <h1 className="font-headline font-bold text-sm tracking-widest text-on-surface">Excavateur XT-900</h1>
-        <button className="text-primary hover:text-on-surface transition-colors">
-          <Icon name="more_vert" className="text-2xl" />
-        </button>
+      {/* Top App Bar */}
+      <div className="bg-surface/90 backdrop-blur-md font-headline font-bold uppercase sticky top-0 z-50 border-b border-outline-variant/10">
+        <div className="flex justify-between items-center w-full px-5 py-4">
+          <button onClick={() => navigate(-1)} className="text-on-surface-variant hover:text-primary transition-colors">
+            <Icon name="arrow_back_ios_new" className="text-base" />
+          </button>
+          <h1 className="text-sm tracking-[0.15em] text-on-surface">{displayName}</h1>
+          <button className="text-on-surface-variant hover:text-primary transition-colors">
+            <Icon name="more_vert" className="text-xl" />
+          </button>
+        </div>
       </div>
 
       <main className="max-w-lg mx-auto md:max-w-2xl">
@@ -32,8 +46,8 @@ const EquipmentDetail: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-[#131313] via-[#131313]/60 to-transparent"></div>
           
           <div className="absolute bottom-6 left-6 right-6">
-            <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-primary mb-2 block">ID: XT-900-ALPHA</span>
-            <h2 className="font-headline text-4xl font-extrabold tracking-tight leading-none text-on-surface mb-4">Excavateur XT-900</h2>
+            <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-primary mb-2 block">ID: {displayId}</span>
+            <h2 className="font-headline text-4xl font-extrabold tracking-tight leading-none text-on-surface mb-4">{displayName}</h2>
             
             <div className="flex flex-wrap gap-2">
               <div className="bg-surface-container-low/80 backdrop-blur-md border border-outline/10 rounded-full px-3 py-1.5 flex items-center gap-1.5">
@@ -70,19 +84,19 @@ const EquipmentDetail: React.FC = () => {
                 <div className="absolute top-0 bottom-0 left-0 w-1 bg-[#F2CA50]"></div>
                 <div className="absolute top-0 bottom-0 left-0 w-12 bg-gradient-to-r from-[#F2CA50]/10 to-transparent pointer-events-none"></div>
                 <h4 className="text-[8px] font-extrabold uppercase tracking-widest text-on-surface-variant mb-3">État Physique</h4>
-                <p className="font-headline text-[28px] font-bold text-primary mb-1 tracking-tight">Moyen</p>
+                <p className="font-headline text-[28px] font-bold text-primary mb-1 tracking-tight">{conditionLabel}</p>
                 <p className="text-[9px] text-on-surface-variant font-medium leading-tight">Nécessite Observation</p>
               </div>
               
               <div className="bg-surface-container-low rounded-[24px] p-5 relative overflow-hidden group border border-outline-variant/20">
-                <div className="absolute top-0 bottom-0 left-0 w-1 bg-[#BFCDFF]"></div>
-                <div className="absolute top-0 bottom-0 left-0 w-12 bg-gradient-to-r from-[#BFCDFF]/10 to-transparent pointer-events-none"></div>
+                <div className="absolute top-0 bottom-0 left-0 w-1" style={{ background: statusColor }}></div>
+                <div className="absolute top-0 bottom-0 left-0 w-12 bg-gradient-to-r from-blue-300/10 to-transparent pointer-events-none"></div>
                 <h4 className="text-[8px] font-extrabold uppercase tracking-widest text-on-surface-variant mb-3">Statut Opérationnel</h4>
                 <div className="flex items-center gap-2 mb-1">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#BFCDFF] shadow-[0_0_8px_rgba(191,205,255,0.6)]"></div>
-                  <p className="font-headline text-xl font-bold text-[#BFCDFF] tracking-tight">Fonctionnel</p>
+                  <div className="w-2.5 h-2.5 rounded-full animate-pulse" style={{ background: statusColor, boxShadow: `0 0 8px ${statusColor}60` }}></div>
+                  <p className="font-headline text-xl font-bold tracking-tight" style={{ color: statusColor }}>{statusLabel}</p>
                 </div>
-                <p className="text-[9px] text-on-surface-variant font-medium leading-tight">En Ligne & Actif</p>
+                <p className="text-[9px] text-on-surface-variant font-medium leading-tight">En Ligne &amp; Actif</p>
               </div>
             </div>
 

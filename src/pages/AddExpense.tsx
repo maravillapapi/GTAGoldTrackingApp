@@ -29,7 +29,8 @@ const AddExpense: React.FC = () => {
       amount: Number(amount),
       category,
       description,
-      receiptImageUrl: receiptImage
+      receiptImageUrl: receiptImage,
+      status: 'PENDING'
     });
 
     navigate('/expenses');

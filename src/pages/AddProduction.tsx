@@ -3,95 +3,221 @@ import { useAppContext } from '../contexts/AppContext';
 import { Icon } from '../components/Icon';
 import { useNavigate } from 'react-router-dom';
 
+const SITES = ['North Ridge Vein 04', 'Alpha-01 Nord', 'Beta-02 Sud'];
+const ZONES = ['Level 400 - Sector G', 'Level 300 - Sector A', 'Surface - Zone B'];
+const TEAMS = ['Vanguard Unit 12', 'Équipe Alpha', 'Équipe Bravo'];
+const SHIFTS = ['Alpha (Jour)', 'Beta (Après-midi)', 'Gamma (Nuit)'];
+
+const REFERENCE_EQUIP = [
+  { id: 'eq-drill', icon: 'precision_manufacturing', label: 'Drill #42A' },
+  { id: 'eq-belt', icon: 'conveyor_belt', label: 'Belt C-9' },
+];
+
 const AddProduction: React.FC = () => {
   const { addProduction, role } = useAppContext();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ amountGrams: '', siteLocation: '', notes: '' });
 
-  const isFormValid = form.amountGrams && !isNaN(Number(form.amountGrams)) && form.siteLocation;
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [shift, setShift] = useState(SHIFTS[0]);
+  const [site] = useState(SITES[0]);
+  const [zone] = useState(ZONES[0]);
+  const [team] = useState(TEAMS[0]);
+  const [amount, setAmount] = useState('');
+  const [notes, setNotes] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isFormValid || role === 'OBSERVER') return;
-
-    addProduction({
-      date: new Date().toISOString(),
-      amountGrams: Number(form.amountGrams),
-      siteLocation: form.siteLocation,
-      notes: form.notes
-    });
-
-    navigate('/production');
+  const handleSave = (andAnother = false) => {
+    if (role === 'OBSERVER') return;
+    const grams = parseFloat(amount);
+    if (!grams || grams <= 0) {
+      setError('La quantité produite doit être une valeur positive.');
+      return;
+    }
+    setError('');
+    addProduction({ date, amountGrams: grams, siteLocation: site, notes });
+    if (andAnother) {
+      setAmount('');
+      setNotes('');
+    } else {
+      navigate('/production');
+    }
   };
 
-  if (role === 'OBSERVER') return <div className="p-8 text-center text-error pt-20 font-bold uppercase tracking-widest">Accès Refusé. Lecture seule.</div>;
-
   return (
-    <>
-      <header className="bg-background text-on-surface font-headline font-bold uppercase sticky top-0 z-40 bg-opacity-90 backdrop-blur-md border-b border-outline/10">
-        <div className="flex justify-between items-center w-full px-6 py-4">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate(-1)} className="text-on-surface-variant hover:text-on-surface transition-colors pb-1">
-              <Icon name="arrow_back_ios_new" />
-            </button>
-            <h1 className="text-xl tracking-tight">Ajout Production</h1>
-          </div>
-          <Icon name="precision_manufacturing" className="text-primary" />
+    <div className="bg-background min-h-screen text-on-surface font-body pb-32">
+
+      {/* Header */}
+      <header className="bg-surface/90 font-headline font-bold uppercase sticky top-0 z-50 backdrop-blur-md border-b border-outline-variant/10">
+        <div className="flex justify-between items-center w-full px-5 py-4">
+          <button onClick={() => navigate(-1)} className="text-on-surface-variant hover:text-primary transition-colors">
+            <Icon name="close" className="text-xl" />
+          </button>
+          <h1 className="text-sm tracking-[0.15em] text-on-surface">Ajout Production</h1>
+          <button className="text-on-surface-variant hover:text-primary transition-colors">
+            <Icon name="help_outline" className="text-xl" />
+          </button>
         </div>
       </header>
 
-      <main className="px-6 mt-6 space-y-8 pb-32 max-w-lg mx-auto md:max-w-3xl">
-        <section className="bg-surface-container-low p-6 rounded-2xl relative overflow-hidden shadow-lg border border-outline-variant/20">
-          <h2 className="font-headline text-lg font-bold uppercase tracking-widest text-on-surface mb-4">Enregistrer Nouveau Rendement</h2>
-          
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest pt-1">Montant (Grammes)</label>
-              <input 
-                type="number" 
+      <main className="px-5 pt-6 max-w-lg mx-auto md:max-w-3xl">
+
+        {/* Operational Context */}
+        <div className="mb-6">
+          <p className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant mb-4">Contexte Opérationnel</p>
+
+          {/* Date + Shift */}
+          <div className="grid grid-cols-2 gap-3 mb-3">
+            <div className="bg-surface-container-low rounded-xl border border-outline-variant/10 p-3">
+              <p className="text-[8px] font-black uppercase tracking-widest text-on-surface-variant mb-2">Date</p>
+              <input
+                type="date"
+                value={date}
+                onChange={e => setDate(e.target.value)}
+                className="bg-transparent text-primary font-headline font-black text-sm w-full focus:outline-none cursor-pointer"
+              />
+            </div>
+            <div className="bg-surface-container-low rounded-xl border border-outline-variant/10 p-3">
+              <p className="text-[8px] font-black uppercase tracking-widest text-on-surface-variant mb-2">Poste</p>
+              <select
+                value={shift}
+                onChange={e => setShift(e.target.value)}
+                className="bg-transparent text-on-surface font-bold text-[11px] w-full focus:outline-none"
+              >
+                {SHIFTS.map(s => <option key={s}>{s}</option>)}
+              </select>
+            </div>
+          </div>
+
+          {/* Site */}
+          <div className="bg-surface-container-low rounded-xl border border-outline-variant/10 p-4 mb-2 flex items-center justify-between cursor-pointer hover:bg-surface-container transition-colors">
+            <div>
+              <p className="text-[8px] font-black uppercase tracking-widest text-on-surface-variant mb-1">Site d'extraction</p>
+              <p className="font-bold text-sm text-on-surface">{site}</p>
+            </div>
+            <Icon name="chevron_right" className="text-on-surface-variant" />
+          </div>
+
+          {/* Zone */}
+          <div className="bg-surface-container-low rounded-xl border border-outline-variant/10 p-4 mb-2 flex items-center justify-between cursor-pointer hover:bg-surface-container transition-colors">
+            <div>
+              <p className="text-[8px] font-black uppercase tracking-widest text-on-surface-variant mb-1">Zone / Niveau</p>
+              <p className="font-bold text-sm text-on-surface">{zone}</p>
+            </div>
+            <Icon name="chevron_right" className="text-on-surface-variant" />
+          </div>
+
+          {/* Team */}
+          <div className="bg-surface-container-low rounded-xl border border-outline-variant/10 p-4 flex items-center justify-between cursor-pointer hover:bg-surface-container transition-colors">
+            <div>
+              <p className="text-[8px] font-black uppercase tracking-widest text-on-surface-variant mb-1">Équipe assignée</p>
+              <p className="font-bold text-sm text-on-surface">{team}</p>
+            </div>
+            <Icon name="chevron_right" className="text-on-surface-variant" />
+          </div>
+        </div>
+
+        {/* Yield Input */}
+        <div className="mb-6">
+          <p className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant mb-4">Saisie du rendement</p>
+          <div className="bg-surface-container-low rounded-2xl border border-outline-variant/10 p-5">
+            <p className="text-[8px] font-black uppercase tracking-widest text-on-surface-variant mb-4">Quantité totale produite</p>
+            <div className="flex items-baseline gap-3 mb-2">
+              <input
+                type="number"
+                placeholder="0.00"
+                value={amount}
+                onChange={e => { setAmount(e.target.value); setError(''); }}
+                className={`flex-1 bg-transparent font-headline text-4xl font-black focus:outline-none placeholder-on-surface-variant/30 ${amount ? 'text-primary' : 'text-on-surface-variant/40'}`}
+                min="0"
                 step="0.01"
-                className="bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-sm font-headline font-bold focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full transition-colors"
-                placeholder="ex. 150.5" 
-                value={form.amountGrams} 
-                onChange={e => setForm({...form, amountGrams: e.target.value})} 
-                required 
               />
+              <span className="font-headline text-xl font-black text-on-surface-variant">g</span>
             </div>
-            
-            <div className="flex flex-col gap-1">
-              <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest pt-1">Localisation du Site</label>
-              <input 
-                type="text" 
-                className="bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-sm font-headline font-bold focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full transition-colors"
-                placeholder="ex. Fosse Nord" 
-                value={form.siteLocation} 
-                onChange={e => setForm({...form, siteLocation: e.target.value})} 
-                required 
-              />
-            </div>
+            {error && (
+              <p className="text-[9px] text-error mt-1">{error}</p>
+            )}
+          </div>
+        </div>
 
-            <div className="flex flex-col gap-1">
-              <label className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest pt-1">Notes de Terrain</label>
-              <textarea 
-                className="bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-sm font-body focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full h-20 transition-colors"
-                placeholder="Détails optionnels..." 
-                value={form.notes} 
-                onChange={e => setForm({...form, notes: e.target.value})} 
-              ></textarea>
+        {/* Report Status + Incident Link */}
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          <div className="bg-surface-container-low rounded-xl border border-outline-variant/10 p-4">
+            <p className="text-[8px] font-black uppercase tracking-widest text-on-surface-variant mb-2">Statut du rapport</p>
+            <div className="flex items-center gap-1.5">
+              <Icon name="check_circle" className="text-green-400 text-sm" />
+              <span className="text-[10px] font-black text-green-400 uppercase tracking-widest">Soumis</span>
             </div>
+          </div>
+          <div className="bg-surface-container-low rounded-xl border border-outline-variant/10 p-4">
+            <p className="text-[8px] font-black uppercase tracking-widest text-on-surface-variant mb-2">Lien Incident</p>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] text-on-surface-variant/60">Aucun lié</span>
+              <div className="w-10 h-5 rounded-full bg-surface-container border border-outline-variant/20 flex items-center p-0.5">
+                <div className="w-4 h-4 rounded-full bg-on-surface-variant/30"></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            <button 
-              type="submit" 
-              disabled={!isFormValid}
-              className={`mt-2 p-4 rounded-xl flex items-center justify-center gap-2 font-headline uppercase font-bold text-xs tracking-widest transition-opacity ${isFormValid ? 'metallic-gradient text-[var(--on-primary)] shadow-[0_5px_15px_rgba(242,202,80,0.2)] hover:scale-105' : 'bg-surface-container-highest opacity-50 text-on-surface-variant cursor-not-allowed'}`}
-            >
-              <Icon name="check_circle" className={isFormValid ? "text-on-primary" : ""} />
-              Soumettre l'Entrée
+        {/* Referenced Equipment */}
+        <div className="mb-6">
+          <p className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant mb-4">Équipements référencés</p>
+          <div className="flex flex-wrap gap-3">
+            {REFERENCE_EQUIP.map(eq => (
+              <div key={eq.id} className="flex items-center gap-2 bg-surface-container-low rounded-xl border border-primary/20 px-3 py-2.5">
+                <Icon name={eq.icon} className="text-primary text-sm" />
+                <span className="text-[10px] font-bold text-on-surface">{eq.label}</span>
+              </div>
+            ))}
+            <button className="flex items-center gap-1.5 bg-surface-container-low rounded-xl border border-outline-variant/10 px-3 py-2.5 border-dashed hover:bg-surface-container transition-colors">
+              <Icon name="add" className="text-on-surface-variant text-sm" />
+              <span className="text-[10px] font-bold text-on-surface-variant">Ajouter</span>
             </button>
-          </form>
-        </section>
+          </div>
+        </div>
+
+        {/* Supervisor Notes */}
+        <div className="mb-8">
+          <p className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant mb-4">Notes superviseur</p>
+          <textarea
+            value={notes}
+            onChange={e => setNotes(e.target.value)}
+            placeholder="Détails d'observation, facteurs environnementaux, performance de l'équipe..."
+            rows={4}
+            className="w-full bg-surface-container-low rounded-2xl border border-outline-variant/10 p-4 text-sm text-on-surface placeholder-on-surface-variant/40 focus:outline-none focus:border-primary/40 resize-none transition-colors"
+          />
+        </div>
+
+        {/* Actions */}
+        {role !== 'OBSERVER' ? (
+          <div className="space-y-3">
+            <button
+              onClick={() => handleSave(false)}
+              className="w-full metallic-gradient py-4 rounded-2xl font-headline font-bold uppercase tracking-widest text-sm text-on-primary hover:opacity-90 transition-opacity"
+            >
+              Enregistrer Production
+            </button>
+            <button
+              onClick={() => handleSave(true)}
+              className="w-full bg-surface-container-low border border-outline-variant/20 py-4 rounded-2xl font-headline font-bold uppercase tracking-widest text-sm text-on-surface hover:bg-surface-container transition-colors"
+            >
+              Enregistrer et en Ajouter une Autre
+            </button>
+            <button
+              onClick={() => navigate(-1)}
+              className="w-full py-3 text-center text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-error transition-colors"
+            >
+              Annuler et Rejeter le Brouillon
+            </button>
+          </div>
+        ) : (
+          <div className="bg-error/5 border border-error/20 rounded-2xl p-4 text-center">
+            <p className="text-[10px] font-bold text-error uppercase tracking-widest">Accès Lecture Seule</p>
+          </div>
+        )}
+
       </main>
-    </>
+    </div>
   );
 };
 

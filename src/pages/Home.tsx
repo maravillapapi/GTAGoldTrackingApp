@@ -1,10 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { useAppContext } from '../contexts/AppContext';
 
+type ChartTab = 'day' | 'week' | 'month' | 'global';
+
+const CHART_DATASETS: Record<ChartTab, { day: string; g: number; change: string; isOff: boolean; hasAlert: boolean; isToday: boolean }[]> = {
+  day: [
+    { day: 'Mar 18', g: 840,  change: '---',  isOff: false, hasAlert: false, isToday: false },
+    { day: 'Mer 19', g: 920,  change: '+9%',  isOff: false, hasAlert: false, isToday: false },
+    { day: 'Jeu 20', g: 710,  change: '-22%', isOff: false, hasAlert: false, isToday: false },
+    { day: 'Ven 21', g: 1150, change: '+62%', isOff: false, hasAlert: false, isToday: false },
+    { day: 'Sam 22', g: 0,    change: 'Off',  isOff: true,  hasAlert: false, isToday: false },
+    { day: 'Dim 23', g: 1180, change: '+15%', isOff: false, hasAlert: true,  isToday: false },
+    { day: 'Lun 24', g: 1248, change: '+6%',  isOff: false, hasAlert: false, isToday: true  },
+  ],
+  week: [
+    { day: 'S.38', g: 1020, change: '---',  isOff: false, hasAlert: false, isToday: false },
+    { day: 'S.39', g: 980,  change: '-4%',  isOff: false, hasAlert: false, isToday: false },
+    { day: 'S.40', g: 1100, change: '+12%', isOff: false, hasAlert: false, isToday: false },
+    { day: 'S.41', g: 870,  change: '-21%', isOff: false, hasAlert: true,  isToday: false },
+    { day: 'S.42', g: 1050, change: '+21%', isOff: false, hasAlert: false, isToday: false },
+    { day: 'S.43', g: 1180, change: '+12%', isOff: false, hasAlert: false, isToday: false },
+    { day: 'S.44', g: 1120, change: '-5%',  isOff: false, hasAlert: false, isToday: true  },
+  ],
+  month: [
+    { day: 'Avr',  g: 890,  change: '---',  isOff: false, hasAlert: false, isToday: false },
+    { day: 'Mai',  g: 1020, change: '+15%', isOff: false, hasAlert: false, isToday: false },
+    { day: 'Juin', g: 1150, change: '+13%', isOff: false, hasAlert: false, isToday: false },
+    { day: 'Juil', g: 980,  change: '-15%', isOff: false, hasAlert: true,  isToday: false },
+    { day: 'Aou',  g: 1080, change: '+10%', isOff: false, hasAlert: false, isToday: false },
+    { day: 'Sep',  g: 1200, change: '+11%', isOff: false, hasAlert: false, isToday: false },
+    { day: 'Oct',  g: 1120, change: '-7%',  isOff: false, hasAlert: false, isToday: true  },
+  ],
+  global: [
+    { day: '2020', g: 720,  change: '---',  isOff: false, hasAlert: false, isToday: false },
+    { day: '2021', g: 890,  change: '+24%', isOff: false, hasAlert: false, isToday: false },
+    { day: '2022', g: 1050, change: '+18%', isOff: false, hasAlert: false, isToday: false },
+    { day: '2023', g: 1120, change: '+7%',  isOff: false, hasAlert: false, isToday: true  },
+    { day: 'Obj.',  g: 1300, change: 'Cible', isOff: false, hasAlert: false, isToday: false },
+    { day: '',      g: 0,   change: '',     isOff: true,  hasAlert: false, isToday: false },
+    { day: '',      g: 0,   change: '',     isOff: true,  hasAlert: false, isToday: false },
+  ],
+};
+
+const TAB_LABELS: Record<ChartTab, string> = {
+  day: 'Jour vs J-1',
+  week: 'Moy. Semaine',
+  month: 'Moy. Mensuelle',
+  global: 'Global',
+};
+
 const Home: React.FC = () => {
   const { role, setIsMenuOpen } = useAppContext();
+  const [chartTab, setChartTab] = useState<ChartTab>('day');
 
   return (
     <>
@@ -176,99 +225,98 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        <section className="bg-surface-container-low p-5 rounded-2xl space-y-6 mb-8 border border-outline-variant/10">
+        <section className="bg-surface-container-low p-5 rounded-2xl space-y-5 mb-8 border border-outline-variant/10">
           <div className="flex justify-between items-baseline">
             <h2 className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Tendance sur 7 jours</h2>
             <p className="text-[10px] text-on-surface-variant/60 font-medium">18 oct — 24 oct 2023</p>
           </div>
-          <div className="bg-surface-container-low p-1 rounded-xl flex gap-1 overflow-x-auto no-scrollbar border border-outline-variant/10">
-            <button className="flex-1 whitespace-nowrap px-3 py-2 rounded-lg text-[9px] font-bold uppercase transition-all bg-primary text-on-primary shadow-sm">JOUR VS J-1</button>
-            <button className="flex-1 whitespace-nowrap px-3 py-2 rounded-lg text-[9px] font-bold uppercase transition-all text-on-surface-variant bg-surface-container-highest/30 hover:bg-surface-bright">Moyenne semaine</button>
-            <button className="flex-1 whitespace-nowrap px-3 py-2 rounded-lg text-[9px] font-bold uppercase transition-all text-on-surface-variant bg-surface-container-highest/30 hover:bg-surface-bright">Moyenne mensuelle</button>
-            <button className="flex-1 whitespace-nowrap px-3 py-2 rounded-lg text-[9px] font-bold uppercase transition-all text-on-surface-variant bg-surface-container-highest/30 hover:bg-surface-bright">Global</button>
-            <button className="flex-1 whitespace-nowrap px-3 py-2 rounded-lg text-[9px] font-bold uppercase transition-all text-on-surface-variant bg-surface-container-highest/30 hover:bg-surface-bright">Objectif</button>
-          </div>
-          
-          <div className="relative flex h-72 w-full gap-2 pt-12 pb-16">
-            <div className="absolute left-0 top-12 bottom-16 w-full flex flex-col justify-between pointer-events-none">
-              <div className="w-full border-t border-outline-variant/10 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">1,5 kg</span></div>
-              <div className="w-full border-t border-outline-variant/10 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">1,0 kg</span></div>
-              <div className="w-full border-t border-outline-variant/10 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">0,5 kg</span></div>
-              <div className="w-full border-t border-outline-variant/10 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">0</span></div>
-            </div>
 
-            <div className="flex-1 flex flex-col items-center justify-end relative z-10">
-              <span className="text-[9px] font-bold text-on-surface-variant/80 mb-1.5">840 g</span>
-              <div className="w-full bg-primary/30 rounded-t-sm h-[42%]"></div>
-              <div className="absolute -bottom-10 flex flex-col items-center">
-                <span className="text-[9px] font-bold text-on-surface-variant whitespace-nowrap uppercase">Mar 18</span>
-                <span className="text-[8px] text-on-surface-variant/40">---</span>
-              </div>
-            </div>
-            
-            <div className="flex-1 flex flex-col items-center justify-end relative z-10">
-              <span className="text-[9px] font-bold text-on-surface-variant/80 mb-1.5">920 g</span>
-              <div className="w-full bg-primary/40 rounded-t-sm h-[48%]"></div>
-              <div className="absolute -bottom-10 flex flex-col items-center">
-                <span className="text-[9px] font-bold text-on-surface-variant whitespace-nowrap uppercase">Mer 19</span>
-                <span className="text-[8px] text-primary font-bold">+9%</span>
-              </div>
-            </div>
-
-            <div className="flex-1 flex flex-col items-center justify-end relative z-10">
-              <span className="text-[9px] font-bold text-on-surface-variant/80 mb-1.5">710 g</span>
-              <div className="w-full bg-primary/20 rounded-t-sm h-[35%]"></div>
-              <div className="absolute -bottom-10 flex flex-col items-center">
-                <span className="text-[9px] font-bold text-on-surface-variant whitespace-nowrap uppercase">Jeu 20</span>
-                <span className="text-[8px] text-error font-bold">-22%</span>
-              </div>
-            </div>
-
-            <div className="flex-1 flex flex-col items-center justify-end relative z-10">
-              <span className="text-[9px] font-bold text-on-surface-variant/80 mb-1.5">1150 g</span>
-              <div className="w-full bg-primary/60 rounded-t-sm h-[68%]"></div>
-              <div className="absolute -bottom-10 flex flex-col items-center">
-                <span className="text-[9px] font-bold text-on-surface-variant whitespace-nowrap uppercase">Ven 21</span>
-                <span className="text-[8px] text-primary font-bold">+62%</span>
-              </div>
-            </div>
-
-            <div className="flex-1 flex flex-col items-center justify-end relative z-10">
-              <div className="absolute top-2 w-max text-center">
-                <span className="text-[8px] leading-tight text-on-surface-variant font-bold uppercase tracking-tighter block bg-surface-container-low px-1"><br/></span>
-              </div>
-              <span className="text-[9px] font-bold text-on-surface-variant/80 mb-1.5">0 g</span>
-              <div className="w-full border-t border-error/30 h-1"></div>
-              <div className="absolute -bottom-10 flex flex-col items-center">
-                <span className="text-[9px] font-bold text-on-surface-variant whitespace-nowrap uppercase">Sam 22</span>
-                <span className="text-[8px] text-on-surface-variant/40">Off</span>
-              </div>
-            </div>
-
-            <div className="flex-1 flex flex-col items-center justify-end relative z-10">
-              <div className="absolute top-2">
-                <Icon name="report" className="text-error text-base" />
-              </div>
-              <span className="text-[9px] font-bold text-on-surface-variant/80 mb-1.5">1180 g</span>
-              <div className="w-full bg-primary/70 rounded-t-sm h-[72%]"></div>
-              <div className="absolute -bottom-10 flex flex-col items-center">
-                <span className="text-[9px] font-bold text-on-surface-variant whitespace-nowrap uppercase">Dim 23</span>
-                <span className="text-[8px] text-primary font-bold">+15%</span>
-              </div>
-            </div>
-
-            <div className="flex-1 flex flex-col items-center justify-end relative z-10">
-              <span className="text-[10px] font-black text-primary mb-1.5">1248 g</span>
-              <div className="w-full bg-primary rounded-t-sm h-[84%] shadow-[0_0_15px_rgba(242,202,80,0.3)]"></div>
-              <div className="absolute -bottom-10 flex flex-col items-center">
-                <span className="text-[9px] font-bold text-primary whitespace-nowrap uppercase">Lun 24</span>
-                <span className="text-[8px] text-primary font-bold">+6%</span>
-              </div>
-            </div>
+          {/* Tab bar */}
+          <div className="bg-surface-container p-1 rounded-xl flex gap-1 overflow-x-auto no-scrollbar border border-outline-variant/10">
+            {(['day', 'week', 'month', 'global'] as ChartTab[]).map(tab => (
+              <button
+                key={tab}
+                onClick={() => setChartTab(tab)}
+                className={`flex-1 whitespace-nowrap px-3 py-2 rounded-lg text-[9px] font-bold uppercase transition-colors ${
+                  chartTab === tab ? 'bg-primary text-on-primary shadow-sm' : 'text-on-surface-variant hover:bg-surface-bright'
+                }`}
+              >
+                {TAB_LABELS[tab]}
+              </button>
+            ))}
           </div>
 
-          <div className="pt-12 flex justify-center">
-            <div className="bg-surface-container-highest/50 px-4 py-2 rounded-full border border-outline-variant/10">
+          {/* Chart area */}
+          {(() => {
+            const data = CHART_DATASETS[chartTab];
+            const maxG = Math.max(...data.map(d => d.g), 1500);
+            return (
+              <div className="w-full">
+                {/* Y-axis grid + bars */}
+                <div className="relative" style={{ height: '180px' }}>
+                  {/* Grid lines */}
+                  {[1500, 1000, 500, 0].map((val) => (
+                    <div
+                      key={val}
+                      className="absolute left-0 right-0 flex items-center pointer-events-none"
+                      style={{ bottom: `${(val / maxG) * 100}%` }}
+                    >
+                      <div className="w-full border-t border-outline-variant/15" />
+                      <span className="text-[8px] text-on-surface-variant/40 pl-1 whitespace-nowrap">{val === 0 ? '0' : `${val/1000} kg`}</span>
+                    </div>
+                  ))}
+
+                  {/* Bars */}
+                  <div className="absolute inset-0 flex items-end gap-1 pb-0">
+                    {data.map((d) => {
+                      const pct = (d.g / maxG) * 100;
+                      return (
+                        <div key={d.day} className="flex-1 flex flex-col items-center justify-end h-full">
+                          {/* Alert icon */}
+                          {d.hasAlert && (
+                            <div className="mb-1 text-error text-[10px]">
+                              <span style={{fontFamily:'Material Symbols Outlined', fontSize:'14px', color:'var(--color-error)'}}>report</span>
+                            </div>
+                          )}
+                          {/* Value label */}
+                          {!d.isOff && d.g > 0 && (
+                            <span className={`text-[8px] font-bold mb-1 ${d.isToday ? 'text-primary' : 'text-on-surface-variant'}`}>{d.g} g</span>
+                          )}
+                          {d.isOff && <span className="text-[8px] font-bold mb-1 text-on-surface-variant/50">0 g</span>}
+                          {/* Bar */}
+                          {d.isOff ? (
+                            <div className="w-full" style={{ height: '2px', background: 'var(--color-error)', opacity: 0.3 }} />
+                          ) : (
+                            <div
+                              className={`w-full rounded-t-sm transition-all ${d.isToday ? 'bg-primary shadow-[0_0_12px_rgba(242,202,80,0.3)]' : 'bg-primary/30'}`}
+                              style={{ height: `${Math.max(pct, 2)}%` }}
+                            />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* X-axis labels */}
+                <div className="flex gap-1 mt-3">
+                  {data.map((d) => {
+                    const changeNeg = d.change.startsWith('-');
+                    const changePos = d.change.startsWith('+');
+                    return (
+                      <div key={`lbl-${d.day}`} className="flex-1 flex flex-col items-center gap-0.5">
+                        <span className={`text-[8px] font-bold uppercase whitespace-nowrap ${d.isToday ? 'text-primary' : 'text-on-surface-variant'}`}>{d.day}</span>
+                        <span className={`text-[7px] font-bold ${changeNeg ? 'text-error' : changePos ? 'text-primary' : 'text-on-surface-variant/50'}`}>{d.change}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
+
+          <div className="flex justify-center pt-2">
+            <div className="bg-surface-container px-5 py-2.5 rounded-full border border-outline-variant/10">
               <span className="text-[10px] text-on-surface-variant font-medium uppercase tracking-widest mr-2">Production moyenne :</span>
               <span className="text-xs font-bold text-primary">1 120 g</span>
             </div>

@@ -11,6 +11,8 @@ interface AppContextType {
   
   isMenuOpen: boolean;
   setIsMenuOpen: (isOpen: boolean) => void;
+  isDark: boolean;
+  toggleDark: () => void;
   
   equipment: Equipment[];
   production: ProductionLog[];
@@ -33,6 +35,15 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [role, setRole] = useState<Role>('ADMIN'); // Default to Admin for testing
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
+
+  const toggleDark = () => {
+    setIsDark(prev => {
+      const next = !prev;
+      document.documentElement.classList.toggle('dark', next);
+      return next;
+    });
+  };
   
   const [equipment] = useState<Equipment[]>(initialEquipment);
   const [production, setProduction] = useState<ProductionLog[]>(initialProduction);
@@ -72,6 +83,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     <AppContext.Provider value={{
       role, setRole,
       isMenuOpen, setIsMenuOpen,
+      isDark, toggleDark,
       equipment, production, incidents, expenses, sales,
       addProduction, addIncident, addSale, addExpense,
       currentStockGrams
