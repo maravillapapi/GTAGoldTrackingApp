@@ -37,8 +37,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem('sv-theme');
-    const prefersDark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-    // Apply immediately so there's no flash
+    // If no saved theme, default to Light (false)
+    const prefersDark = saved === 'dark';
+    // Apply immediate class
     document.documentElement.classList.toggle('dark', prefersDark);
     return prefersDark;
   });
