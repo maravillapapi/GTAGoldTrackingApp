@@ -1,231 +1,282 @@
 import React from 'react';
-import { Icon } from '../components/Icon';
 import { Link } from 'react-router-dom';
+import { Icon } from '../components/Icon';
+import { useAppContext } from '../contexts/AppContext';
 
 const Home: React.FC = () => {
+  const { role } = useAppContext();
+
   return (
-    <div className="bg-[#131313] min-h-screen text-[#E5E2E1] font-body selection:bg-primary/30">
-      
-      {/* Top Header */}
-      <header className="flex justify-between items-center px-6 pt-6 pb-2">
-        <div className="flex items-center gap-3">
-          <Icon name="location_on" className="text-[#F2CA50] text-xl" />
-          <div className="flex flex-col">
-            <span className="text-[9px] text-[#D0C5AF]">Site Opérationnel</span>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#F2CA50]">ALPHA-01 NORD</span>
+    <>
+      <header className="bg-[#131313] font-headline font-bold docked full-width top-0 sticky z-50 border-b border-white/5">
+        <div className="flex justify-between items-center w-full px-6 py-4">
+          <div className="flex items-center gap-4">
+            <button className="text-on-surface-variant hover:text-primary transition-colors">
+              <Icon name="menu" />
+            </button>
+            <div className="flex items-center gap-2">
+              <Icon name="location_on" className="text-primary text-xl" />
+              <div className="flex flex-col leading-none">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[10px] text-on-surface-variant font-medium tracking-normal normal-case">Site opérationnel</span>
+                  <div className="flex items-center gap-1 bg-green-500/10 px-2 py-0.5 rounded-full border border-green-500/20">
+                    <span className="w-1 h-1 bg-green-500 rounded-full"></span>
+                    <span className="text-[8px] font-bold text-green-500 uppercase tracking-tighter">Stable</span>
+                  </div>
+                </div>
+                <span className="text-sm tracking-widest text-primary uppercase">Alpha-01 Nord</span>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="bg-[#242323] border border-outline/10 rounded-full px-4 py-1.5 flex items-center">
-            <span className="text-[9px] font-bold uppercase tracking-widest text-[#D0C5AF]">ADMIN</span>
-          </div>
-          <div className="relative">
-            <Icon name="notifications" className="text-[#F2CA50] text-xl" />
-            <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#F2CA50] rounded-full border-2 border-[#131313]"></span>
+          <div className="flex items-center gap-4">
+            <div className="bg-surface-container-highest px-3 py-1 rounded-full border border-outline-variant/20">
+               <span className="text-[10px] font-bold tracking-tighter text-primary uppercase">{role === 'ADMIN' ? 'Administrateur' : role === 'SUPERVISOR' ? 'Superviseur' : 'Observateur'}</span>
+            </div>
+            <Link to="/profile" className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center border border-white/10 hover:bg-surface-bright transition-colors decoration-transparent">
+              <Icon name="person" className="text-sm opacity-70 text-on-surface" />
+            </Link>
           </div>
         </div>
       </header>
 
-      <main className="px-6 mt-6 max-w-lg mx-auto md:max-w-2xl pb-32">
-        
-        {/* Page Header */}
-        <div className="flex flex-col mb-8">
-          <span className="text-xs font-bold text-[#b4a996] mb-1">Lundi 24 Oct 2023</span>
-          <h1 className="font-headline text-[32px] font-extrabold tracking-tight leading-none text-white">Synthèse Exécutive</h1>
-        </div>
-
-        {/* Primary KPI Card */}
-        <div className="bg-[#F2CA50] rounded-[24px] p-6 text-[#131313] shadow-[0_10px_40px_rgba(242,202,80,0.15)] mb-4 relative overflow-hidden group">
-          <div className="absolute -right-12 -top-12 w-48 h-48 bg-white opacity-10 rounded-full blur-2xl group-hover:scale-110 transition-transform duration-700"></div>
-          
-          <div className="flex justify-between items-start mb-2 relative z-10">
-            <h2 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#131313]/70">Production du Jour</h2>
-            <Icon name="trending_up" className="text-[#131313] opacity-80" />
-          </div>
-          
-          <div className="flex items-baseline gap-2 mb-6 relative z-10">
-            <span className="font-headline text-[44px] font-black tracking-tighter leading-none">1,248.50</span>
-            <span className="font-headline text-2xl font-bold">g</span>
-          </div>
-          
-          <div className="flex justify-between items-end relative z-10">
-            <div className="bg-[#131313]/10 px-3 py-1.5 rounded-[8px]">
-              <span className="text-[10px] font-bold text-[#131313]">≈ 1.25 kg AU</span>
-            </div>
-            <Link to="/production/2023-10-24" className="text-[11px] font-extrabold text-[#131313] border-b-2 border-[#131313] pb-0.5 hover:opacity-70 transition-opacity">
-              Voir Détails
-            </Link>
-          </div>
-        </div>
-
-        {/* Secondary KPIs */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="bg-[#1C1B1B] rounded-[24px] p-5 border border-outline/5 relative overflow-hidden">
-            <h3 className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-3">Prod. Hebdo</h3>
-            <p className="font-headline text-[22px] font-bold text-[#F2CA50] mb-3 tracking-tight">8,642.10 g</p>
-            <div className="h-1 bg-outline/10 rounded-full w-full overflow-hidden flex">
-              <div className="h-full bg-[#F2CA50] w-[65%]"></div>
-            </div>
-          </div>
-          <div className="bg-[#1C1B1B] rounded-[24px] p-5 border border-outline/5 relative overflow-hidden">
-            <h3 className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-3">Prod. Mensuelle</h3>
-            <p className="font-headline text-[22px] font-bold text-[#F2CA50] mb-3 tracking-tight">34,120.00 g</p>
-            <div className="h-1 bg-outline/10 rounded-full w-full overflow-hidden flex">
-              <div className="h-full bg-[#F2CA50] w-[80%]"></div>
-            </div>
-          </div>
-        </div>
-
-        {/* Third Row KPI */}
-        <div className="bg-[#1C1B1B] rounded-[24px] p-5 border border-outline/5 mb-4 flex justify-between items-center">
+      <main className="px-6 mt-6 space-y-8 max-w-lg mx-auto pb-32">
+        <div className="flex justify-between items-end">
           <div>
-            <h3 className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-2">Réserve d'Or (Chambre Forte)</h3>
-            <div className="flex items-baseline gap-2">
-              <span className="font-headline text-[22px] font-bold text-[#F2CA50] tracking-tight">42,850 g</span>
-              <span className="text-[11px] font-bold text-[#D0C5AF]/60">(42.85 kg)</span>
+            <p className="text-on-surface-variant text-sm font-medium">Lundi 24 octobre 2023</p>
+            <h1 className="font-headline text-3xl font-extrabold tracking-tight">Résumé exécutif</h1>
+          </div>
+        </div>
+
+        <section className="bg-surface-container-low p-4 rounded-2xl border border-white/5">
+          <h2 className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-3">Aujourd'hui</h2>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2 text-xs font-medium text-green-500">
+              <Icon name="check_circle" className="text-sm" />
+              Production normale
             </div>
-          </div>
-          <div className="bg-[#242323] p-3 rounded-2xl border border-outline/5">
-            <Icon name="inventory_2" className="text-[#59481A] text-xl" />
-          </div>
-        </div>
-
-        {/* Financial KPIs */}
-        <div className="grid grid-cols-2 gap-4 mb-10">
-          <div className="bg-[#1C1B1B] rounded-[24px] p-5">
-            <h3 className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-1">Ventes Mensuelles</h3>
-            <p className="font-headline text-[28px] font-bold text-[#BFCDFF] tracking-tight">$1.42M</p>
-          </div>
-          <div className="bg-[#1C1B1B] rounded-[24px] p-5">
-            <h3 className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] mb-1">Dépenses</h3>
-            <p className="font-headline text-[28px] font-bold text-[#FF8888] tracking-tight">$842K</p>
-          </div>
-        </div>
-
-        {/* Administrative Controls */}
-        <section className="mb-10">
-          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D0C5AF] mb-4">Contrôles Administratifs</h3>
-          <div className="grid grid-cols-3 gap-3">
-            <button className="bg-[#1C1B1B] hover:bg-[#2A2929] transition-colors rounded-[24px] p-5 flex flex-col items-center justify-center border border-outline/5 group">
-              <div className="bg-[#F2CA50]/10 p-2.5 rounded-full mb-3 group-hover:scale-110 transition-transform">
-                <Icon name="add_circle" className="text-[#F2CA50] text-lg" />
-              </div>
-              <span className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] text-center leading-relaxed">Ajouter<br/>Production</span>
-            </button>
-            <button className="bg-[#1C1B1B] hover:bg-[#2A2929] transition-colors rounded-[24px] p-5 flex flex-col items-center justify-center border border-outline/5 group">
-              <div className="bg-[#F2CA50]/10 p-2.5 rounded-full mb-3 group-hover:scale-110 transition-transform">
-                <Icon name="payments" className="text-[#F2CA50] text-lg" />
-              </div>
-              <span className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] text-center leading-relaxed">Ajouter<br/>Dépense</span>
-            </button>
-            <button className="bg-[#1C1B1B] hover:bg-[#2A2929] transition-colors rounded-[24px] p-5 flex flex-col items-center justify-center border border-outline/5 group">
-              <div className="bg-[#F2CA50]/10 p-2.5 rounded-full mb-3 group-hover:scale-110 transition-transform">
-                <Icon name="sell" className="text-[#F2CA50] text-lg" />
-              </div>
-              <span className="text-[8px] font-extrabold uppercase tracking-widest text-[#D0C5AF] text-center leading-relaxed">Ajouter<br/>Vente</span>
-            </button>
+            <div className="flex items-center gap-2 text-xs font-medium text-primary">
+              <Icon name="warning" className="text-sm" />
+              1 incident actif
+            </div>
+            <div className="flex items-center gap-2 text-xs font-medium text-error">
+              <Icon name="error" className="text-sm" />
+              Écart de stock détecté
+            </div>
           </div>
         </section>
 
-        {/* Critical Alerts */}
-        <section className="mb-10">
-          <div className="flex justify-between items-end mb-4">
-            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D0C5AF]">Alertes Critiques</h3>
-            <Link to="/incidents" className="text-[9px] font-black uppercase tracking-widest text-[#F2CA50] hover:opacity-70 transition-opacity">
-              Voir Tout
+        <section className="relative overflow-hidden rounded-2xl p-6 metallic-gradient text-on-primary shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
+          <div className="flex justify-between items-start mb-2">
+            <p className="font-label text-xs font-bold uppercase tracking-[0.1em] opacity-80">Production du jour</p>
+            <Icon name="trending_up" className="opacity-70" />
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="font-headline text-5xl font-black tracking-tighter">1 248,50</span>
+            <span className="font-headline text-xl font-bold opacity-90">g</span>
+          </div>
+          <p className="text-sm font-bold opacity-70 mt-1">≈ 1,25 kg</p>
+
+          <div className="mt-6 pt-4 border-t border-on-primary/10 grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-[9px] font-bold uppercase opacity-60">Valeur estimée</p>
+              <p className="font-headline text-lg font-bold">62 400 $</p>
+            </div>
+            <div>
+              <p className="text-[9px] font-bold uppercase opacity-60">Stock après production</p>
+              <p className="font-headline text-lg font-bold">44 098 g</p>
+            </div>
+          </div>
+          <div className="mt-4 flex items-center justify-end">
+            <Link to="/production" className="text-xs font-bold underline underline-offset-4 decoration-2">Voir détails</Link>
+          </div>
+        </section>
+
+        <section className="grid grid-cols-2 gap-4">
+          <Link to="/inventory" className="bg-surface-container-low p-4 rounded-2xl space-y-1 col-span-2 flex justify-between items-center border border-white/5 decoration-transparent">
+            <div>
+              <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Stock actuel</p>
+              <p className="font-headline text-2xl text-primary font-bold">42 850 g <span className="text-sm font-medium text-on-surface-variant ml-1">(42,85 kg)</span></p>
+            </div>
+            <Icon name="inventory_2" className="text-on-surface-variant/40 text-4xl" />
+          </Link>
+          <div className="bg-surface-container-low p-4 rounded-2xl border border-white/5">
+            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Ventes&nbsp;<div>mensuelles</div></p>
+            <p className="font-headline text-xl text-primary font-bold">1,42 M $</p>
+          </div>
+          <div className="bg-surface-container-low p-4 rounded-2xl border border-white/5">
+            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Dépenses mensuelles</p>
+            <p className="font-headline text-xl text-error font-bold">842 K $</p>
+          </div>
+          <div className="bg-surface-container-low p-4 rounded-2xl space-y-2 border border-white/5 col-span-1">
+            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Production semaine</p>
+            <p className="font-headline text-xl text-primary font-bold">8 642 g</p>
+            <div className="h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
+              <div className="h-full bg-primary w-[72%]"></div>
+            </div>
+          </div>
+          <div className="bg-surface-container-low p-4 rounded-2xl space-y-2 border border-white/5 col-span-1">
+            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Production mensuelle</p>
+            <p className="font-headline text-xl text-primary font-bold">34 120 g</p>
+            <div className="h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
+              <div className="h-full bg-primary w-[85%]"></div>
+            </div>
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="font-headline text-sm font-bold uppercase tracking-widest text-on-surface-variant">Actions rapides</h2>
+          <div className="flex overflow-x-auto gap-4 pb-2 no-scrollbar">
+            <Link to="/production" className="flex-shrink-0 w-32 bg-primary p-4 rounded-2xl flex flex-col items-center gap-2 shadow-lg shadow-primary/10 decoration-transparent">
+              <Icon name="add_circle" className="text-on-primary" />
+              <span className="text-[10px] font-bold uppercase text-center leading-tight text-on-primary">Ajouter<br/>production</span>
             </Link>
+            <Link to="/sales" className="flex-shrink-0 w-32 bg-surface-container-highest p-4 rounded-2xl flex flex-col items-center gap-2 border border-white/5 decoration-transparent hover:bg-surface-bright transition-colors">
+              <Icon name="sell" className="text-primary" />
+              <span className="text-[10px] font-bold uppercase text-center leading-tight text-on-surface">Ajouter<br/>vente</span>
+            </Link>
+            <Link to="/incidents" className="flex-shrink-0 w-32 bg-surface-container-highest p-4 rounded-2xl flex flex-col items-center gap-2 border border-white/5 decoration-transparent hover:bg-surface-bright transition-colors">
+              <Icon name="report_problem" className="text-error" />
+              <span className="text-[10px] font-bold uppercase text-center leading-tight text-on-surface">Signaler<br/>incident</span>
+            </Link>
+            <Link to="/expenses" className="flex-shrink-0 w-32 bg-surface-container-highest p-4 rounded-2xl flex flex-col items-center gap-2 border border-white/5 opacity-80 hover:opacity-100 decoration-transparent hover:bg-surface-bright transition-colors">
+              <Icon name="payments" className="text-primary" />
+              <span className="text-[10px] font-bold uppercase text-center leading-tight text-on-surface">Ajouter<br/>dépense</span>
+            </Link>
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <div className="flex justify-between items-center">
+            <h2 className="font-headline text-sm font-bold uppercase tracking-widest text-on-surface-variant">Alertes critiques</h2>
+            <Link to="/incidents" className="text-[10px] font-bold text-primary uppercase cursor-pointer decoration-transparent">Voir tout</Link>
           </div>
           <div className="space-y-3">
-            <Link to="/incidents/INC-84" className="bg-[#1C1B1B] p-5 rounded-[24px] flex items-center justify-between group border-l-[3px] border-[#FF8888] hover:bg-[#2A2929] transition-all overflow-hidden relative">
-              <div className="absolute top-0 bottom-0 left-0 w-16 bg-gradient-to-r from-[#FF8888]/10 to-transparent pointer-events-none"></div>
-              <div className="flex items-start gap-4 z-10">
-                <Icon name="warning" className="text-[#FF8888] mt-0.5" />
-                <div className="flex flex-col">
-                  <span className="font-bold text-sm text-white mb-0.5">Incohérence des Stocks</span>
-                  <span className="text-[11px] text-[#D0C5AF]">Site Beta-02 : Écart de 12.4g.</span>
+            <div className="bg-surface-container-low p-4 rounded-2xl flex gap-4 items-start border-l-4 border-error">
+              <Icon name="warning" className="text-error mt-0.5" />
+              <div className="flex-1">
+                <div className="flex justify-between items-center mb-1">
+                  <h3 className="text-sm font-bold text-on-surface">Écart de stock</h3>
+                  <span className="text-[10px] bg-error/10 text-error px-2 py-0.5 rounded-full font-bold uppercase">Critique</span>
                 </div>
+                <p className="text-xs text-on-surface-variant">+12,4 g non expliqués</p>
+                <p className="text-[10px] font-bold text-error uppercase mt-1 tracking-tighter">Impact : fiabilité des ventes affectée</p>
               </div>
-              <div className="bg-[#FF8888]/10 px-2 py-1 rounded-[6px] border border-[#FF8888]/20 z-10">
-                <span className="text-[8px] font-black uppercase tracking-widest text-[#FF8888]">Haute</span>
-              </div>
-            </Link>
-            
-            <Link to="/incidents/INC-85" className="bg-[#1C1B1B] p-5 rounded-[24px] flex items-center justify-between group border-l-[3px] border-[#F2CA50] hover:bg-[#2A2929] transition-all overflow-hidden relative">
-              <div className="absolute top-0 bottom-0 left-0 w-16 bg-gradient-to-r from-[#F2CA50]/10 to-transparent pointer-events-none"></div>
-              <div className="flex items-start gap-4 z-10">
-                <Icon name="build" className="text-[#F2CA50] mt-0.5" />
-                <div className="flex flex-col">
-                  <span className="font-bold text-sm text-white mb-0.5">Panne Machine</span>
-                  <span className="text-[11px] text-[#D0C5AF]">Excavateur X74 : Panne hydraulique.</span>
+            </div>
+            <div className="bg-surface-container-low p-4 rounded-2xl flex gap-4 items-start border-l-4 border-primary">
+              <Icon name="build" className="text-primary mt-0.5" />
+              <div className="flex-1">
+                <div className="flex justify-between items-center mb-1">
+                  <h3 className="text-sm font-bold text-on-surface">Panne équipement</h3>
+                  <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold uppercase">Moyen</span>
                 </div>
+                <p className="text-xs text-on-surface-variant">Excavatrice X74</p>
+                <p className="text-[10px] font-bold text-primary uppercase mt-1 tracking-tighter">Impact : -320 g de production estimée</p>
               </div>
-              <div className="bg-[#F2CA50]/10 px-2 py-1 rounded-[6px] border border-[#F2CA50]/20 z-10">
-                <span className="text-[8px] font-black uppercase tracking-widest text-[#F2CA50]">Moy.</span>
-              </div>
-            </Link>
+            </div>
           </div>
         </section>
 
-        {/* 7-Day Trend Chart */}
-        <section className="bg-[#1C1B1B] p-6 rounded-[32px] mb-8 border border-outline/5 relative overflow-hidden">
-          <div className="flex justify-between items-end mb-6">
-            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D0C5AF]">Tendance sur 7 Jours</h3>
-            <span className="text-[9px] text-[#D0C5AF] tracking-wider">18 Oct — 24 Oct 2023</span>
+        <section className="bg-surface-container-low p-5 rounded-2xl space-y-6 mb-8 border border-white/5">
+          <div className="flex justify-between items-baseline">
+            <h2 className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Tendance sur 7 jours</h2>
+            <p className="text-[10px] text-on-surface-variant/60 font-medium">18 oct — 24 oct 2023</p>
+          </div>
+          <div className="bg-surface-container-low p-1 rounded-xl flex gap-1 overflow-x-auto no-scrollbar border border-white/5">
+            <button className="flex-1 whitespace-nowrap px-3 py-2 rounded-lg text-[9px] font-bold uppercase transition-all bg-primary text-on-primary shadow-sm">JOUR VS J-1</button>
+            <button className="flex-1 whitespace-nowrap px-3 py-2 rounded-lg text-[9px] font-bold uppercase transition-all text-on-surface-variant bg-surface-container-highest/30 hover:bg-surface-bright">Moyenne semaine</button>
+            <button className="flex-1 whitespace-nowrap px-3 py-2 rounded-lg text-[9px] font-bold uppercase transition-all text-on-surface-variant bg-surface-container-highest/30 hover:bg-surface-bright">Moyenne mensuelle</button>
+            <button className="flex-1 whitespace-nowrap px-3 py-2 rounded-lg text-[9px] font-bold uppercase transition-all text-on-surface-variant bg-surface-container-highest/30 hover:bg-surface-bright">Global</button>
+            <button className="flex-1 whitespace-nowrap px-3 py-2 rounded-lg text-[9px] font-bold uppercase transition-all text-on-surface-variant bg-surface-container-highest/30 hover:bg-surface-bright">Objectif</button>
           </div>
           
-          <div className="flex border border-outline/10 rounded-[10px] bg-[#131313] p-1 mb-10">
-            <button className="flex-1 bg-[#F2CA50] text-[#131313] rounded-[6px] py-2 text-[8px] font-extrabold uppercase tracking-widest shadow-sm">Jour/Jour</button>
-            <button className="flex-1 text-[#D0C5AF] rounded-[6px] py-2 text-[8px] font-bold uppercase tracking-widest hover:text-white transition-colors">Moy. Semaine</button>
-            <button className="flex-1 text-[#D0C5AF] rounded-[6px] py-2 text-[8px] font-bold uppercase tracking-widest hover:text-white transition-colors">Moy. Mois</button>
-            <button className="flex-1 text-[#D0C5AF] rounded-[6px] py-2 text-[8px] font-bold uppercase tracking-widest hover:text-white transition-colors">Historique</button>
-          </div>
-
-          <div className="relative h-64 w-full flex items-end justify-between pt-8 pb-10">
-            {/* Chart Grid Lines */}
-            <div className="absolute inset-0 flex flex-col justify-between pt-8 pb-10 pointer-events-none">
-              <div className="w-full border-b border-outline/10 flex justify-end">
-                <span className="text-[7px] text-[#D0C5AF]/50 -mt-2 bg-[#1C1B1B] pl-2 -mr-1 rounded-bl">1.5kg</span>
-              </div>
-              <div className="w-full border-b border-dashed border-outline/10 flex justify-end"></div>
-              <div className="w-full border-b border-dashed border-outline/10 flex justify-end"></div>
-              <div className="w-full border-b border-outline/20"></div>
+          <div className="relative flex h-72 w-full gap-2 pt-12 pb-16">
+            <div className="absolute left-0 top-12 bottom-16 w-full flex flex-col justify-between pointer-events-none">
+              <div className="w-full border-t border-white/5 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">1,5 kg</span></div>
+              <div className="w-full border-t border-white/5 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">1,0 kg</span></div>
+              <div className="w-full border-t border-white/5 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">0,5 kg</span></div>
+              <div className="w-full border-t border-white/5 flex justify-end"><span className="text-[8px] text-on-surface-variant/40 -mt-2 pr-1">0</span></div>
             </div>
 
-            {/* Chart Bars */}
-            {[
-              { day: 'Mar 18', stat: '...', value: '840g', h: '56%', trend: 'none' },
-              { day: 'Mer 19', stat: '+9%', value: '920g', h: '61.3%', trend: 'up' },
-              { day: 'Jeu 20', stat: '-22%', value: '710g', h: '47.3%', trend: 'down' },
-              { day: 'Ven 21', stat: '+62%', value: '1150g', h: '76.6%', trend: 'up' },
-              { day: 'Sam 22', stat: '-11%', value: '1020g', h: '68%', trend: 'down' },
-              { day: 'Dim 23', stat: '+15%', value: '1180g', h: '78.6%', trend: 'up' },
-              { day: 'Lun 24', stat: '+6%', value: '1248g', h: '83.2%', active: true, trend: 'up' }
-            ].map((col, idx) => (
-              <div key={idx} className="relative flex flex-col items-center justify-end h-full w-[11%] group">
-                <span className={`absolute -top-5 text-[9px] font-bold transition-opacity ${col.active ? 'text-[#F2CA50]' : 'text-white/80 group-hover:opacity-100 opacity-60'}`}>
-                  {col.value}
-                </span>
-                
-                <div 
-                  className={`w-full rounded-sm transition-all duration-500 ease-out origin-bottom ${col.active ? 'bg-[#F2CA50] shadow-[0_0_15px_rgba(242,202,80,0.2)]' : 'bg-[#5B502C] hover:bg-[#685D36]'}`}
-                  style={{ height: col.h }}
-                ></div>
-
-                <div className="absolute -bottom-9 flex flex-col items-center whitespace-nowrap">
-                  <span className={`text-[8px] font-bold leading-tight ${col.active ? 'text-[#F2CA50]' : 'text-[#D0C5AF]'}`}>
-                    {col.day}
-                  </span>
-                  <span className={`text-[8px] font-bold mt-0.5 ${col.trend === 'up' ? 'text-white' : col.trend === 'down' ? 'text-[#FF8888]' : 'text-[#D0C5AF]'}`}>
-                    {col.stat}
-                  </span>
-                </div>
+            <div className="flex-1 flex flex-col items-center justify-end relative z-10">
+              <span className="text-[9px] font-bold text-on-surface-variant/80 mb-1.5">840 g</span>
+              <div className="w-full bg-primary/30 rounded-t-sm h-[42%]"></div>
+              <div className="absolute -bottom-10 flex flex-col items-center">
+                <span className="text-[9px] font-bold text-on-surface-variant whitespace-nowrap uppercase">Mar 18</span>
+                <span className="text-[8px] text-on-surface-variant/40">---</span>
               </div>
-            ))}
+            </div>
+            
+            <div className="flex-1 flex flex-col items-center justify-end relative z-10">
+              <span className="text-[9px] font-bold text-on-surface-variant/80 mb-1.5">920 g</span>
+              <div className="w-full bg-primary/40 rounded-t-sm h-[48%]"></div>
+              <div className="absolute -bottom-10 flex flex-col items-center">
+                <span className="text-[9px] font-bold text-on-surface-variant whitespace-nowrap uppercase">Mer 19</span>
+                <span className="text-[8px] text-primary font-bold">+9%</span>
+              </div>
+            </div>
+
+            <div className="flex-1 flex flex-col items-center justify-end relative z-10">
+              <span className="text-[9px] font-bold text-on-surface-variant/80 mb-1.5">710 g</span>
+              <div className="w-full bg-primary/20 rounded-t-sm h-[35%]"></div>
+              <div className="absolute -bottom-10 flex flex-col items-center">
+                <span className="text-[9px] font-bold text-on-surface-variant whitespace-nowrap uppercase">Jeu 20</span>
+                <span className="text-[8px] text-error font-bold">-22%</span>
+              </div>
+            </div>
+
+            <div className="flex-1 flex flex-col items-center justify-end relative z-10">
+              <span className="text-[9px] font-bold text-on-surface-variant/80 mb-1.5">1150 g</span>
+              <div className="w-full bg-primary/60 rounded-t-sm h-[68%]"></div>
+              <div className="absolute -bottom-10 flex flex-col items-center">
+                <span className="text-[9px] font-bold text-on-surface-variant whitespace-nowrap uppercase">Ven 21</span>
+                <span className="text-[8px] text-primary font-bold">+62%</span>
+              </div>
+            </div>
+
+            <div className="flex-1 flex flex-col items-center justify-end relative z-10">
+              <div className="absolute top-2 w-max text-center">
+                <span className="text-[8px] leading-tight text-on-surface-variant font-bold uppercase tracking-tighter block bg-surface-container-low px-1"><br/></span>
+              </div>
+              <span className="text-[9px] font-bold text-on-surface-variant/80 mb-1.5">0 g</span>
+              <div className="w-full border-t border-error/30 h-1"></div>
+              <div className="absolute -bottom-10 flex flex-col items-center">
+                <span className="text-[9px] font-bold text-on-surface-variant whitespace-nowrap uppercase">Sam 22</span>
+                <span className="text-[8px] text-on-surface-variant/40">Off</span>
+              </div>
+            </div>
+
+            <div className="flex-1 flex flex-col items-center justify-end relative z-10">
+              <div className="absolute top-2">
+                <Icon name="report" className="text-error text-base" />
+              </div>
+              <span className="text-[9px] font-bold text-on-surface-variant/80 mb-1.5">1180 g</span>
+              <div className="w-full bg-primary/70 rounded-t-sm h-[72%]"></div>
+              <div className="absolute -bottom-10 flex flex-col items-center">
+                <span className="text-[9px] font-bold text-on-surface-variant whitespace-nowrap uppercase">Dim 23</span>
+                <span className="text-[8px] text-primary font-bold">+15%</span>
+              </div>
+            </div>
+
+            <div className="flex-1 flex flex-col items-center justify-end relative z-10">
+              <span className="text-[10px] font-black text-primary mb-1.5">1248 g</span>
+              <div className="w-full bg-primary rounded-t-sm h-[84%] shadow-[0_0_15px_rgba(242,202,80,0.3)]"></div>
+              <div className="absolute -bottom-10 flex flex-col items-center">
+                <span className="text-[9px] font-bold text-primary whitespace-nowrap uppercase">Lun 24</span>
+                <span className="text-[8px] text-primary font-bold">+6%</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-12 flex justify-center">
+            <div className="bg-surface-container-highest/50 px-4 py-2 rounded-full border border-white/5">
+              <span className="text-[10px] text-on-surface-variant font-medium uppercase tracking-widest mr-2">Production moyenne :</span>
+              <span className="text-xs font-bold text-primary">1 120 g</span>
+            </div>
           </div>
         </section>
 
       </main>
-    </div>
+    </>
   );
 };
 
