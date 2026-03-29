@@ -103,7 +103,7 @@ const Home: React.FC = () => {
         </div>
       </header>
 
-      <main className="px-6 mt-6 space-y-8 max-w-lg mx-auto pb-32">
+      <main className="px-6 mt-6 space-y-8 max-w-lg mx-auto pb-32 page-enter">
         <div className="flex justify-between items-end">
           <div>
             <p className="text-on-surface-variant text-sm font-medium capitalize">
@@ -113,7 +113,7 @@ const Home: React.FC = () => {
           </div>
         </div>
 
-        <section className="bg-surface-container-low p-4 rounded-2xl border border-outline-variant/10">
+        <section className="bg-surface-container-low p-4 rounded-2xl border border-outline-variant/10 card-lift">
           <h2 className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-3">Aujourd'hui</h2>
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2 text-xs font-medium text-green-500">
@@ -131,7 +131,7 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        <section className="relative overflow-hidden rounded-2xl p-6 metallic-gradient text-on-primary shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
+        <section className="relative overflow-hidden rounded-2xl p-6 metallic-gradient text-on-primary shadow-[0_20px_40px_rgba(0,0,0,0.3)] card-lift">
           <div className="flex justify-between items-start mb-2">
             <p className="font-label text-xs font-bold uppercase tracking-[0.1em] opacity-80">Production du jour</p>
             <Icon name="trending_up" className="opacity-70" />
