@@ -55,9 +55,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem('sv-theme');
-    // If no saved theme, default to Light (false)
-    const prefersDark = saved === 'dark';
-    // Apply immediate class
+    // Default to dark mode (Binance style) if no saved preference
+    const prefersDark = saved !== 'light';
     document.documentElement.classList.toggle('dark', prefersDark);
     return prefersDark;
   });

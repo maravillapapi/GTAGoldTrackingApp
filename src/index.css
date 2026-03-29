@@ -29,28 +29,30 @@
   }
 
   .dark {
-    /* ── Dark Mode (Binance-style) ── */
-    --color-background: #0B0E11;
-    --color-on-background: #EAECEF;
-    --color-surface: #0B0E11;
-    --color-surface-bright: #2B3139;
-    --color-surface-variant: #1E2026;
-    --color-surface-container-lowest: #080A0D;
-    --color-surface-container-low: #1E2026;
-    --color-surface-container: #2B3139;
-    --color-surface-container-high: #363C45;
-    --color-surface-container-highest: #404854;
-    --color-on-surface: #EAECEF;
-    --color-on-surface-variant: #848E9C;
-    --color-outline: #2B3139;
-    --color-outline-variant: #1E2026;
-    --color-primary: #F2CA50;
-    --color-on-primary: #1A1200;
-    --color-primary-container: #D4AF37;
-    --color-error: #F6495D;
-    --color-on-error: #FFFFFF;
-    --color-error-container: #3D0A12;
-    --color-on-error-container: #FFB3BB;
+    /* ── Dark Mode — Binance Design System ── */
+    --color-background:               #0B0E11;
+    --color-on-background:            #EAECEF;
+    --color-surface:                  #181A20;
+    --color-surface-bright:           #2B3139;
+    --color-surface-variant:          #1E2026;
+    --color-surface-container-lowest: #0B0E11;
+    --color-surface-container-low:    #1E2026;
+    --color-surface-container:        #2B3139;
+    --color-surface-container-high:   #363C45;
+    --color-surface-container-highest:#404854;
+    --color-on-surface:               #EAECEF;
+    --color-on-surface-variant:       #848E9C;
+    --color-outline:                  #2B3139;
+    --color-outline-variant:          #1E2026;
+    /* Binance Yellow — exact brand color */
+    --color-primary:                  #F0B90B;
+    --color-on-primary:               #000000;
+    --color-primary-container:        #B88A00;
+    /* Binance Red */
+    --color-error:                    #F6465D;
+    --color-on-error:                 #FFFFFF;
+    --color-error-container:          #3D0A12;
+    --color-on-error-container:       #FFB3BB;
   }
 
   body {
@@ -93,13 +95,13 @@
     background: linear-gradient(135deg, #C8960C 0%, #9A6F00 100%);
   }
 
-  /* Dark mode: warm classic brass + text uses dark background for max contrast */
+  /* Dark mode: Binance yellow gradient */
   .dark .metallic-gradient {
-    background: linear-gradient(135deg, #f2ca50 0%, #d4af37 100%);
-    color: var(--color-background) !important;
+    background: linear-gradient(135deg, #F0B90B 0%, #B88A00 100%);
+    color: #000000 !important;
   }
   .dark .metallic-gradient * {
-    color: var(--color-background) !important;
+    color: #000000 !important;
   }
   
   .glass-card {
