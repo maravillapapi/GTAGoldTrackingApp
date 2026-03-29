@@ -3,48 +3,67 @@ import { Link } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { useAppContext } from '../contexts/AppContext';
 
-type ChartTab = 'day' | 'week' | 'month' | 'global';
+type ChartTab = 'day' | 'week' | 'month';
 
 // 7-day bars NEVER change — only the % comparison mode changes per tab
 const DAY_DATA = [
-  { day: 'Tue 18', g: 840,  hasAlert: false, isToday: false, isOff: false },
-  { day: 'Wed 19', g: 920,  hasAlert: false, isToday: false, isOff: false },
-  { day: 'Thu 20', g: 710,  hasAlert: false, isToday: false, isOff: false },
-  { day: 'Fri 21', g: 1150, hasAlert: false, isToday: false, isOff: false },
-  { day: 'Sat 22', g: 1020, hasAlert: false, isToday: false, isOff: false },
-  { day: 'Sun 23', g: 1180, hasAlert: false, isToday: false, isOff: false },
-  { day: 'Mon 24', g: 1248, hasAlert: false, isToday: true,  isOff: false },
+  { day: 'Tue 18', g: 840,  isToday: false, isOff: false },
+  { day: 'Wed 19', g: 920,  isToday: false, isOff: false },
+  { day: 'Thu 20', g: 710,  isToday: false, isOff: false },
+  { day: 'Fri 21', g: 1150, isToday: false, isOff: false },
+  { day: 'Sat 22', g: 1020, isToday: false, isOff: false },
+  { day: 'Sun 23', g: 1180, isToday: false, isOff: false },
+  { day: 'Mon 24', g: 1248, isToday: true,  isOff: false },
 ];
-const WEEKLY_AVG  = 1000;
-const MONTHLY_AVG = 1080;
-const GLOBAL_REF  = 920;
+
+// Reference values for comparisons
+const AVG_7_DAYS   = Math.round(DAY_DATA.reduce((s, d) => s + d.g, 0) / DAY_DATA.length); // 1010
+const PREV_DAY_REF = 1180; // Sun 23 — used as J-1 reference for today
+const AVG_PREV_WEEK  = 1000;
+const AVG_PREV_MONTH = 1080;
+
 const CHART_H = 160;
 const MAX_G   = 1500;
 
 function getChange(tab: ChartTab, idx: number): string {
   const d = DAY_DATA[idx];
   if (d.isOff) return 'Off';
-  
-  // Custom values derived from reference image for DAY-ON-DAY view
+
   if (tab === 'day') {
-    const changes = ['---', '+9%', '-22%', '+62%', '-11%', '+15%', '+6%'];
-    return changes[idx];
+    // VS J-1: compare to previous day in the array
+    if (idx === 0) return '---';
+    const ref = DAY_DATA[idx - 1].g;
+    const pct = ((d.g - ref) / ref) * 100;
+    return (pct >= 0 ? '+' : '') + pct.toFixed(0) + '%';
   }
-  
-  let ref: number;
-  if (tab === 'week')  { ref = WEEKLY_AVG; }
-  else if (tab === 'month') { ref = MONTHLY_AVG; }
-  else                      { ref = GLOBAL_REF; }
-  
+
+  const ref = tab === 'week' ? AVG_PREV_WEEK : AVG_PREV_MONTH;
   const pct = ((d.g - ref) / ref) * 100;
   return (pct >= 0 ? '+' : '') + pct.toFixed(0) + '%';
 }
 
 const TAB_LABELS: Record<ChartTab, string> = {
-  day:    'JOUR PAR JOUR',
-  week:   'MOY. SEMAINE',
-  month:  'MOY. MENSUELLE',
-  global: 'GLOBAL',
+  day:   'VS J-1',
+  week:  'VS Moy. Semaine préc.',
+  month: 'VS Moy. Mois préc.',
+};
+
+const TAB_SUBTITLES: Record<ChartTab, string> = {
+  day:   'Variation de chaque jour par rapport au jour précédent',
+  week:  'Variation de chaque jour par rapport à la production moyenne de la semaine précédente',
+  month: 'Variation de chaque jour par rapport à la production moyenne du mois précédent',
+};
+
+const REF_LABEL: Record<ChartTab, string> = {
+  day:   'PRODUCTION J-1',
+  week:  'MOY. SEMAINE PRÉCÉDENTE',
+  month: 'MOY. MOIS PRÉCÉDENT',
+};
+
+const REF_VALUE: Record<ChartTab, number> = {
+  day:   PREV_DAY_REF,
+  week:  AVG_PREV_WEEK,
+  month: AVG_PREV_MONTH,
 };
 
 const Home: React.FC = () => {
@@ -87,7 +106,9 @@ const Home: React.FC = () => {
       <main className="px-6 mt-6 space-y-8 max-w-lg mx-auto pb-32">
         <div className="flex justify-between items-end">
           <div>
-            <p className="text-on-surface-variant text-sm font-medium">Lundi 24 octobre 2023</p>
+            <p className="text-on-surface-variant text-sm font-medium capitalize">
+              {new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            </p>
             <h1 className="font-headline text-3xl font-extrabold tracking-tight">Résumé exécutif</h1>
           </div>
         </div>
@@ -227,12 +248,13 @@ const Home: React.FC = () => {
             <p className="text-[10px] text-on-surface-variant/60 font-medium whitespace-nowrap ml-4">18 Oct — 24 Oct, 2023</p>
           </div>
 
-          <div className="bg-surface-container/50 p-1 rounded-xl flex gap-1 overflow-x-auto no-scrollbar border border-outline-variant/10">
-            {(['day', 'week', 'month', 'global'] as ChartTab[]).map(tab => (
+          {/* Tab selector — 3 tabs */}
+          <div className="bg-surface-container/50 p-1 rounded-xl flex gap-1 border border-outline-variant/10">
+            {(['day', 'week', 'month'] as ChartTab[]).map(tab => (
               <button
                 key={tab}
                 onClick={() => setChartTab(tab)}
-                className={`flex-1 whitespace-nowrap px-3 py-2 rounded-lg text-[8px] font-black tracking-tight uppercase transition-all ${
+                className={`flex-1 whitespace-nowrap px-2 py-2 rounded-lg text-[8px] font-black tracking-tight uppercase transition-all ${
                   chartTab === tab ? 'bg-[#F2CA50] text-[#1A1200] shadow-md scale-[1.02]' : 'text-on-surface-variant/60 hover:text-on-surface hover:bg-surface-bright/50'
                 }`}
               >
@@ -241,11 +263,15 @@ const Home: React.FC = () => {
             ))}
           </div>
 
+          {/* Contextual subtitle */}
+          <p className="text-[9px] text-on-surface-variant/50 font-medium italic text-center -mt-2">
+            {TAB_SUBTITLES[chartTab]}
+          </p>
+
           {/* Chart area — bars use pixel heights for reliable rendering */}
           <div className="w-full">
-            {/* Chart: grid lines + bars together */}
             <div className="relative" style={{ height: `${CHART_H}px` }}>
-              {/* Axe Y (Lignes de fond) */}
+              {/* Axe Y grid lines */}
               {[1500, 1000, 500, 0].map((val) => (
                 <div
                   key={val}
@@ -259,22 +285,18 @@ const Home: React.FC = () => {
                 </div>
               ))}
 
-              {/* Bars row — each column is a portion of the chart width */}
+              {/* Bars */}
               <div className="absolute inset-0 flex items-end gap-1">
                 {DAY_DATA.map((d) => {
                   const barH = d.isOff ? 0 : Math.max((d.g / MAX_G) * CHART_H, 3);
                   return (
                     <div key={d.day} className="flex-1 flex flex-col items-center" style={{ height: `${CHART_H}px` }}>
-                      {/* spacer pushes bar to bottom */}
                       <div className="flex-1" />
-                      {/* Value over bar */}
                       {!d.isToday && !d.isOff && (
                         <span className="text-[10px] font-bold text-on-surface-variant/70 mb-1 leading-none">
                           {d.g}g
                         </span>
                       )}
-                      
-                      {/* Bar rendering (Filled style) */}
                       {d.isOff ? (
                         <div className="w-full bg-error/10 rounded-t-sm" style={{ height: '4px' }} />
                       ) : (
@@ -287,9 +309,9 @@ const Home: React.FC = () => {
                           style={{ height: `${barH}px` }}
                         >
                           {d.isToday && (
-                             <div className="flex flex-col items-center -mt-6">
-                               <span className="text-[11px] font-bold text-[#F2CA50] mb-0.5">{d.g}g</span>
-                             </div>
+                            <div className="flex flex-col items-center -mt-6">
+                              <span className="text-[11px] font-bold text-[#F2CA50] mb-0.5">{d.g}g</span>
+                            </div>
                           )}
                         </div>
                       )}
@@ -299,17 +321,26 @@ const Home: React.FC = () => {
               </div>
             </div>
 
+            {/* X-axis: day labels + % */}
             <div className="flex gap-1 mt-4">
               {DAY_DATA.map((d, idx) => {
                 const change = getChange(chartTab, idx);
                 const isNeg = change.startsWith('-');
+                const dayLabel = d.isToday ? 'LUN 24'
+                  : d.day === 'Tue 18' ? 'MAR 18'
+                  : d.day === 'Wed 19' ? 'MER 19'
+                  : d.day === 'Thu 20' ? 'JEU 20'
+                  : d.day === 'Fri 21' ? 'VEN 21'
+                  : d.day === 'Sat 22' ? 'SAM 22' : 'DIM 23';
                 return (
                   <div key={`x-${d.day}`} className="flex-1 flex flex-col items-center gap-1">
                     <span className={`text-[9px] font-black tracking-tighter whitespace-nowrap ${d.isToday ? 'text-[#F2CA50] scale-105' : 'text-on-surface-variant/70'}`}>
-                      {d.isToday ? 'LUN 24' : d.day === 'Tue 18' ? 'MAR 18' : d.day === 'Wed 19' ? 'MER 19' : d.day === 'Thu 20' ? 'JEU 20' : d.day === 'Fri 21' ? 'VEN 21' : d.day === 'Sat 22' ? 'SAM 22' : 'DIM 23'}
+                      {dayLabel}
                     </span>
                     <span className={`text-[9px] font-bold ${
-                      d.isOff ? 'text-on-surface-variant/30' : isNeg ? 'text-[#F6495D]' : 'text-[#F2CA50]'
+                      change === '---' ? 'text-on-surface-variant/30'
+                      : d.isOff ? 'text-on-surface-variant/30'
+                      : isNeg ? 'text-[#F6495D]' : 'text-[#F2CA50]'
                     }`}>
                       {change}
                     </span>
@@ -319,10 +350,25 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex justify-center pt-2">
-            <div className="bg-surface-container px-5 py-2.5 rounded-full border border-outline-variant/10">
-              <span className="text-[10px] text-on-surface-variant font-medium uppercase tracking-widest mr-2">Production moyenne :</span>
-              <span className="text-xs font-bold text-primary">1 120 g</span>
+          {/* Bottom block — 2 rows */}
+          <div className="flex flex-col items-center pt-2 gap-2">
+            <div className="bg-surface-container px-5 py-3 rounded-2xl border border-outline-variant/10 w-full max-w-sm">
+              <div className="flex justify-between items-center mb-1.5">
+                <span className="text-[9px] text-on-surface-variant font-bold uppercase tracking-widest">
+                  Prod. moy. sur les 7 derniers jours :
+                </span>
+                <span className="text-xs font-bold text-on-surface ml-2 whitespace-nowrap">
+                  {AVG_7_DAYS.toLocaleString('fr-FR')} g
+                </span>
+              </div>
+              <div className="flex justify-between items-center border-t border-outline-variant/10 pt-1.5">
+                <span className="text-[9px] text-on-surface-variant font-bold uppercase tracking-widest">
+                  {REF_LABEL[chartTab]} :
+                </span>
+                <span className="text-xs font-bold text-primary ml-2 whitespace-nowrap">
+                  {REF_VALUE[chartTab].toLocaleString('fr-FR')} g
+                </span>
+              </div>
             </div>
           </div>
         </section>

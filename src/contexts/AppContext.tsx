@@ -1,9 +1,27 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { Role, Equipment, ProductionLog, Incident, Expense, Sale } from '../data/mockData';
 import { 
   initialEquipment, initialProduction, initialIncidents, initialExpenses, initialSales
 } from '../data/mockData';
+
+const STORAGE_KEYS = {
+  THEME:      'sv-theme',
+  PRODUCTION: 'sv-production',
+  INCIDENTS:  'sv-incidents',
+  EXPENSES:   'sv-expenses',
+  SALES:      'sv-sales',
+  EQUIPMENT:  'sv-equipment',
+};
+
+function loadFromStorage<T>(key: string, fallback: T): T {
+  try {
+    const saved = localStorage.getItem(key);
+    return saved ? (JSON.parse(saved) as T) : fallback;
+  } catch {
+    return fallback;
+  }
+}
 
 interface AppContextType {
   role: Role;
@@ -57,11 +75,18 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     document.documentElement.classList.toggle('dark', isDark);
   }, [isDark]);
   
-  const [equipment] = useState<Equipment[]>(initialEquipment);
-  const [production, setProduction] = useState<ProductionLog[]>(initialProduction);
-  const [incidents, setIncidents] = useState<Incident[]>(initialIncidents);
-  const [expenses, setExpenses] = useState<Expense[]>(initialExpenses);
-  const [sales, setSales] = useState<Sale[]>(initialSales);
+  const [equipment]               = useState<Equipment[]>(   () => loadFromStorage(STORAGE_KEYS.EQUIPMENT,  initialEquipment));
+  const [production, setProduction] = useState<ProductionLog[]>(() => loadFromStorage(STORAGE_KEYS.PRODUCTION, initialProduction));
+  const [incidents,  setIncidents]  = useState<Incident[]>(    () => loadFromStorage(STORAGE_KEYS.INCIDENTS,  initialIncidents));
+  const [expenses,   setExpenses]   = useState<Expense[]>(     () => loadFromStorage(STORAGE_KEYS.EXPENSES,   initialExpenses));
+  const [sales,      setSales]      = useState<Sale[]>(         () => loadFromStorage(STORAGE_KEYS.SALES,      initialSales));
+
+  // Persist to localStorage on every change
+  useEffect(() => { localStorage.setItem(STORAGE_KEYS.PRODUCTION, JSON.stringify(production)); }, [production]);
+  useEffect(() => { localStorage.setItem(STORAGE_KEYS.INCIDENTS,  JSON.stringify(incidents));  }, [incidents]);
+  useEffect(() => { localStorage.setItem(STORAGE_KEYS.EXPENSES,   JSON.stringify(expenses));   }, [expenses]);
+  useEffect(() => { localStorage.setItem(STORAGE_KEYS.SALES,      JSON.stringify(sales));      }, [sales]);
+  useEffect(() => { localStorage.setItem(STORAGE_KEYS.EQUIPMENT,  JSON.stringify(equipment));  }, [equipment]);
 
   const currentStockGrams = 
     production.filter(p => p.status !== 'REJECTED').reduce((sum, p) => sum + p.amountGrams, 0) - 
